@@ -1,0 +1,48 @@
+**Patient 1 (rétine):**
+Décollement de rétine macula OFF | 23986001 | Detachment of retina (disorder)
+Rétinite nécrosante à VZV | 231970004 | Acute retinal necrosis syndrome (disorder)
+Oedème papillaire | 57054005 | Papilledema (disorder)
+Vasculites occlusives rétiniennes | 413532000 | Retinal vasculitis (disorder)
+Vitrite importante | 77489003 | Vitritis (disorder)
+Début de sclérose nucléaire | 53889007 | Nuclear cataract (disorder)
+Atrophie des plages de nécroses rétiniennes | 232072007 | Retinal atrophy (disorder)
+
+**Patient 2 (strabisme):**
+Exotropie intermittente | 62466006 | Exotropia (disorder)
+Tendance V | UNKNOWN | UNKNOWN
+Dissocie rapide ODG (OGF) | 31281000 | Dissociated vertical deviation (disorder)
+Nystagmus | 563001 | Nystagmus (disorder)
+
+**Patient 3 (oncologie de l'œil):**
+Naevus choroïdien maculaire OG avec exsudation sous-rétinienne | 764674000 | Choroidal nevus (disorder)
+Liquide sous-rétinien résorbé | 247124009 | Subretinal fluid (finding)
+Petite membrane épirétinienne OG | 367649002 | Epiretinal membrane (disorder)
+Hypertension intra-oculaire bilatérale | 21986008 | Ocular hypertension (disorder)
+Cataracte corticale bilatérale | 193570009 | Cortical cataract (disorder)
+Blépharite antérieure bilatérale | 415692008 | Anterior blepharitis (disorder)
+
+**Patient 4 (neuro-ophtalmologie / glaucome):**
+Suspicion de glaucome à pression normale bilatéral | 371158000 | Low tension glaucoma (disorder)
+Petit déficit paracentral inférieur droit | 23388006 | Visual field defect (finding)
+Paralysie oculomotrice nerf VI bilatérale | 414252005 | Bilateral sixth nerve palsy (disorder)
+Épiphora dû à un drainage insuffisant | 1285011008 | Epiphora due to insufficient drainage (disorder)
+Cataracte sénile nucléaire œil droit | 53889007 | Nuclear cataract (disorder)
+Hypertension artérielle | 38341003 | Hypertensive disorder (disorder)
+Hypertension oculaire bilatérale | 21986008 | Ocular hypertension (disorder)
+Paralysie du grand oblique nerf IV bilatérale | 6695004 | Fourth cranial nerve palsy (disorder)
+Carcinome in situ du pharynx (cavum) | 254415000 | Carcinoma of nasopharynx (disorder)
+
+**Patient 5 (cornée / Fuchs):**
+Dystrophie de Fuchs avec décompensation endothéliale OG | 193839007 | Fuchs endothelial dystrophy (disorder)
+Pseudophake bilatéral | 421168009 | Pseudophakia (finding)
+Neuropathie optique bilatérale | 371151008 | Bilateral optic neuropathy (disorder)
+Guttata cornéen bilatéral | 702359005 | Corneal guttae (finding)
+Dysfonction des glandes de Meibomius bilatérale | 418285008 | Meibomian gland dysfunction (disorder)
+
+**Patient 6 (neuro-ophtalmologie):**
+Séquelles de parésie microvasculaire du nerf VI | 414252005 | Bilateral sixth nerve palsy (disorder)
+Diplopie intermittente | 24982008 | Diplopia (finding)
+Cataracte nucléaire œil droit | 53889007 | Nuclear cataract (disorder)
+Ptosis droit | 11934000 | Ptosis of eyelid (disorder)
+PKE OG (antécédent) | 421168009 | Pseudophakia (finding)
+Myodésopsies OG | 301234006 | Floaters (finding)

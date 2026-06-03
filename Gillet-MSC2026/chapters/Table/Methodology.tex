@@ -1,0 +1,149 @@
+% ============================================================
+% CHAPTER 3: METHODOLOGY
+% ============================================================
+
+This chapter details the experimental approach adopted in Phase~1 of this thesis. We describe the rationale behind the selection of four complementary methods, characterise the benchmark dataset and its constraints, define the two-tier evaluation framework applied throughout, and outline the shared preprocessing decisions that underpin all methods.
+
+\section{Research Design and Method Selection}
+
+\subsection{A Comparative, Multi-Paradigm Approach}
+
+The literature review in Chapter~2 reveals a heterogeneous landscape of computational approaches for SNOMED CT coding, ranging from classical dictionary matching to large language model integration. No single paradigm dominates across all evaluation contexts, and direct comparison between studies is complicated by heterogeneous datasets, evaluation metrics, and task definitions. This thesis adopts a \textbf{comparative, multi-paradigm design} in which four methods spanning the full spectrum from pure symbolic rule-based systems to generative language model pipelines are implemented, evaluated under identical conditions, and compared on the same dataset.
+
+This design serves two complementary goals. First, it provides empirically grounded guidance for practitioners facing the deployment decision at Cliniques universitaires Saint-Luc, a decision that involves not only raw performance but also computational cost, interpretability, and robustness to French medical text. Second, it contributes to the scientific literature by offering the rare setting where multiple paradigms are assessed head-to-head on identical clinical data, addressing the standardisation gap identified in Section~2.4.
+
+\subsection{The Four-Method Framework}
+
+The selection of methods was driven by three criteria: (1)~coverage of distinct algorithmic paradigms, (2)~feasibility of adaptation to French medical language in Phase~2, and (3)~tractability within the computational resources available (an NVIDIA RTX~5070 GPU with 8~GB VRAM, with automatic CPU fallback).
+
+The four methods form a coherent methodological ladder:
+
+\begin{itemize}
+    \item \textbf{Method~1: Dictionary Matching.}
+    A purely symbolic baseline requiring no neural models. It establishes the performance ceiling achievable without machine learning and serves as the reference against which all other methods are measured. Its transparency and speed make it a natural candidate for clinical deployment in environments where interpretability is required.
+
+    \item \textbf{Method~2: SapBERT Bi-encoder.}
+    A neural embedding approach that maps clinical spans and SNOMED concepts to a shared semantic space. It tests whether biomedical language model representations improve over exact string matching, particularly for paraphrases, morphological variants, and synonyms not present in the training dictionary.
+
+    \item \textbf{Method~3: LLM NER + SNOMED RAG.}
+    A generative approach where a large language model (LLM) performs both entity recognition and candidate reranking, grounded by a retrieval step over SNOMED CT. It tests the hypothesis that contextual understanding at the document level (identifying what a clinical note \textit{means} rather than which strings it \textit{contains}) improves entity linking quality.
+
+    \item \textbf{Method~4: Hybrid LLM NER with Tiered Dictionary.}
+    An architecture that combines the contextual span detection of Method~3 with the precision of Method~1's dictionary lookup, using semantic search only as a fallback for out-of-vocabulary entities. Method~4 was designed after preliminary results revealed complementary strengths in Methods~1 and~3: Method~1 achieves high concept precision for known terms while Method~3 achieves better span identification in rich clinical contexts.
+\end{itemize}
+
+It should be noted that the original research plan foresaw three methods. Method~4 emerged organically during the experimental phase when it became apparent that the two dominant failure modes (inadequate span detection in Methods~1 and~2 and low concept precision for rare entities in Method~3) could be jointly addressed by combining LLM-driven NER with dictionary-based linking. The addition of Method~4 is therefore not a deviation from the comparative philosophy but a natural extension of it, motivated by observed experimental evidence.
+
+\section{Dataset: SNOMED CT Entity Linking Challenge 1.2.1}
+
+\subsection{Dataset Description}
+
+Phase~1 of this thesis uses the SNOMED CT Entity Linking Challenge~1.2.1, a publicly available benchmark constructed from MIMIC-IV discharge summaries~\cite{Kulyabin:2024}. The dataset comprises two CSV files:
+
+\begin{itemize}
+    \item \texttt{train\_notes.csv}: 272 English clinical discharge summaries from the Beth Israel Deaconess Medical Center (Boston, USA), with an average length of approximately 10\,000 characters per note.
+    \item \texttt{train\_annotations.csv}: 75\,491 gold annotations. Each annotation records the note identifier, the character-level start and end offsets of a medical span, the verbatim span text, and the corresponding SNOMED CT concept identifier. The \texttt{annotation\_type} field distinguishes the training partition (\texttt{"train"}) from the held-out test partition (\texttt{"test"}).
+\end{itemize}
+
+The \textbf{annotation density} of this dataset is remarkable: each note contains on average approximately 340 gold annotations, implying that nearly every medically relevant word sequence has been labelled. This includes not only primary diagnoses and procedures but also anatomical structures, clinical findings, substances, and generic medical terms such as ``patient'' or ``history.'' This exhaustive annotation philosophy has significant consequences for the evaluation of methods that adopt selective entity extraction strategies, as discussed in detail in Section~\ref{sec:annotation_density_paradox}.
+
+\subsection{Train/Test Split}
+
+The split between training and test sets is pre-defined by the challenge: 200 notes are allocated to training and 72 to the held-out test set. The partition operates at the \textit{note level} rather than the annotation level, ensuring complete absence of data leakage: no test note text or annotation is consulted at any point during the construction of method artefacts (frequency dictionaries, FAISS indices, or embedding models). All methods strictly observe this boundary.
+
+\subsection{SNOMED CT Resources}
+
+Two distributions of SNOMED CT in Release Format~2 (RF2) are used across the methods:
+
+\begin{enumerate}
+    \item \textbf{SNOMED CT International Release (March 2026):} Approximately 1\,400\,000 active descriptions covering \textasciitilde370\,000 concepts in English. Used as the primary source for Method~1's Tier~2 synonym dictionary and Method~2's FAISS index.
+    \item \textbf{Belgian Alpha Release Package (September 2020):} 397\,523 active French (and Dutch) descriptions. Added to Method~1's Tier~2 to enable matching of French clinical terms, and used by the annotation tool to display SNOMED labels in French. At the time of writing, this French/Dutch package is over five years old, creating an asymmetry with the International English release used for the benchmark (March 2026). The potential impact of outdated French terminology on Method~1's Tier~2 matching is acknowledged as a limitation.
+\end{enumerate}
+
+The RF2 format is a tab-separated file with columns including \texttt{conceptId}, \texttt{term}, \texttt{active}, \texttt{languageCode}, and \texttt{typeId}. Only records with \texttt{active == "1"} are retained. The \texttt{typeId} field distinguishes Fully Specified Names (FSN, \texttt{typeId = 900000000000003001}) from synonyms (\texttt{typeId = 900000000000013009}).
+
+\section{Evaluation Framework}
+
+\subsection{Design Principles}
+
+Two considerations shaped the evaluation design. First, the task is fundamentally \textbf{end-to-end}: all methods receive only raw note text and must produce both span boundaries and SNOMED concept rankings without any access to gold span positions at prediction time. Any evaluation that provides gold spans as input would conflate span detection quality with concept linking quality, obscuring the bottleneck that most limits clinical utility. Second, mIoU, the primary metric of the SNOMED CT Entity Linking Challenge, is maximally strict: it credits a prediction only when both the span boundaries and the top-1 concept are simultaneously correct. While this strictness is appropriate for benchmark competition, it can mask useful information about ranking quality when a method places the correct concept at rank~2 or~3.
+
+For these reasons, two evaluation metrics are computed in parallel: a primary strict end-to-end metric and a secondary ranking-focused table.
+
+\subsection{Metric 1: Mean Intersection over Union (mIoU)}
+
+The primary metric is the mean Intersection over Union (mIoU). For two character-level spans $a = [a_s, a_e)$ and $b = [b_s, b_e)$, the IoU is defined as the ratio of character overlap to character union:
+
+$$\text{IoU}(a, b) = \frac{\max(0,\; \min(a_e, b_e) - \max(a_s, b_s))}{(a_e - a_s) + (b_e - b_s) - \max(0,\; \min(a_e, b_e) - \max(a_s, b_s))}$$
+
+For each gold annotation $g$ in the test set, the evaluator identifies the predicted span $\hat{s}_g$ with the highest IoU against $g$. A correctness score is then assigned:
+
+$$\text{score}(g) = \text{IoU}(g,\, \hat{s}_g) \cdot \mathbf{1}\!\left[\hat{c}^{(1)}_g = c_g\right]$$
+
+where $\hat{c}^{(1)}_g$ is the top-ranked predicted concept for the matched span and $c_g$ is the gold concept identifier. If no predicted span overlaps $g$ at all, the score is zero. The final mIoU is the macro-average of all per-annotation scores, computed note-by-note and then averaged over all notes. This metric simultaneously penalises imprecise span boundaries and incorrect concept assignment, making it among the most demanding metrics used in clinical NLP evaluation.
+
+\subsection{Metric 2: Ranking Quality Table}
+
+The ranking quality table evaluates concept candidate quality using a loosened span gate: a gold annotation $g$ qualifies for the ranking evaluation only if its best-matching predicted span achieves $\text{IoU} \geq 0.3$. For qualifying annotations, the rank $r_g$ of the gold concept within the predicted candidate list is determined, and four complementary scoring functions are applied:
+
+\begin{itemize}
+    \item \textbf{MRR} (Mean Reciprocal Rank): $\text{score}(r_g) = 1/r_g$. Standard in information retrieval; strongly rewards rank~1 and decays rapidly.
+    \item \textbf{NDCG@5}: $\text{score}(r_g) = 1/\log_2(r_g + 1)$, normalised by the ideal gain of $1.0$ at rank~1. Provides smoother decay and is standard in information retrieval literature.
+    \item \textbf{Linear@5}: $\text{score}(r_g) = (6 - r_g) / 5$. A linearly decreasing reward; the most intuitive for non-specialist readers.
+    \item \textbf{Hits@k}: Binary indicator of whether the gold concept appears anywhere in the top $k$ predictions, for $k \in \{1, 3, 5\}$.
+\end{itemize}
+
+All four scores are macro-averaged over qualifying annotations per note, then averaged over notes. A gold annotation with no overlapping predicted span contributes a score of zero to all ranking metrics.
+
+\subsection{Justification of Metric Design Choices}
+
+The two-metric design reflects a deliberate trade-off. mIoU is adopted as the \textbf{benchmark-compliance metric}: it matches the primary metric of the SNOMED CT Entity Linking Challenge and enables direct comparison with published results. It is not, however, a pure measure of clinical utility. Because MIMIC-IV annotates every medical expression exhaustively ($\sim$340 annotations per note), any method that performs selective extraction of clinically relevant entities ($\sim$30--40 per note) will score near zero on mIoU regardless of concept linking quality — an architectural penalty that Chapter~5 identifies explicitly as the annotation density paradox. For clinical deployment utility — whether the correct concept appears anywhere in the candidate list — \textbf{Hits@5 and MRR are the load-bearing metrics}. mIoU and Hits@5 should therefore be read in tandem: mIoU measures benchmark alignment, Hits@5 measures practical usefulness.
+
+However, mIoU is sensitive to the span detection component even when the concept linking component performs well. The ranking quality table addresses this by loosening the span gate to $\text{IoU} \geq 0.3$, sufficient to confirm that the system identified approximately the right region of text, and then evaluating only the quality of the ranked concept list. This separation is particularly important when comparing methods whose span detection strategies differ fundamentally (sliding window versus LLM extraction), as the two metrics together reveal whether a performance gap is attributable to span detection or concept ranking.
+
+\subsection{Qualitative Evaluation on French Clinical PDFs}
+
+In parallel with the quantitative Phase~1 benchmark, all four methods were applied to six anonymised ophthalmological clinical documents from the Cliniques universitaires Saint-Luc. These documents include discharge letters, consultation notes, and examination reports, written in French by ophthalmologists. The ground truth for this evaluation is the problem list encoded by the treating physician in the Epic EHR system, a sparse, curated list of diagnoses rather than the exhaustive annotation of all medical expressions that characterises MIMIC-IV.
+
+Although the small sample precludes statistical inference, this evaluation provides critical evidence of real-world transferability: it tests whether methods that perform well on an English benchmark generalise to the actual clinical domain for which they are designed. The contrast between the two evaluation contexts, dense English annotations versus sparse French diagnoses, is a central finding of Chapter~5 and motivates the future annotation effort described in the conclusion.
+
+As external reference points, two general-purpose large language models, GPT-3.5 and Claude Sonnet~4.6, are evaluated on the same six French clinical PDFs using the same NER prompt as Methods~3 and~4. These baselines measure performance achievable without a dedicated retrieval pipeline: unlike the automated methods, they have no access to the SNOMED RF2 index or training dictionary and cannot guarantee that generated concept codes correspond to active SNOMED entries.
+
+\section{Shared Preprocessing Strategy}
+
+All four methods share the same entry point for text normalisation, implemented in \texttt{Link/preprocessor.py}. The primary design constraint is \textbf{offset preservation}: any transformation of the text must leave character positions compatible with the gold annotation offsets, which reference the raw original note text.
+
+The normalisation pipeline applies four lightweight steps: Unicode NFC normalisation (converting composed character sequences to their canonical equivalents), replacement of non-breaking spaces, horizontal tabs, and form-feed characters with standard ASCII spaces, collapse of consecutive spaces within lines while preserving newlines as section boundaries, and stripping of trailing whitespace per line. Notably, case is preserved at the text level: lowercasing is applied only when computing dictionary lookup keys, since case carries disambiguating information for clinical abbreviations (\eg\ the distinction between \texttt{TA} for ``tension artérielle'' and \texttt{Ta} for ``Tantalum'').
+
+The shared module additionally provides a negation detector that scans a 60-character window preceding each candidate span for English cues (\textit{no, not, without, absence of, negative for, denies}) and French cues (\textit{pas de, sans, absence de, négatif, aucun}). Spans identified as negated are suppressed before concept assignment in all methods.
+
+\section{Summary}
+
+Table~\ref{tab:method_overview} summarises the key characteristics of the four methods evaluated in this thesis, and Figure~\ref{fig:method_overview} provides a visual overview of the full pipeline. The next chapter documents their technical implementation, including the engineering problems encountered and how they were resolved.
+
+\begin{table}[htbp]
+\centering
+\scriptsize
+\caption{Overview of the four methods evaluated in Phase~1.}
+\label{tab:method_overview}
+\begin{threeparttable}
+\begin{tabular}{L{3.0cm}cccc}
+\toprule
+\textbf{Characteristic} & \textbf{M1} & \textbf{M2} & \textbf{M3} & \textbf{M4} \\
+\midrule
+Span detection & Sliding window & Sliding window & LLM NER & LLM NER \\
+Concept linking & Dict + fuzzy & SapBERT + FAISS & FAISS + LLM & Dict$\to$FAISS \\
+Requires LLM & No & No & Yes & Yes \\
+Requires SNOMED RF2 & Yes & Yes & Yes & Yes \\
+French-capable & Partial\tnote{a} & Yes & Yes & Yes \\
+Build artefact & JSON & FAISS index & FAISS index & Both \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\footnotesize
+\item[a] Method~1 uses the Belgian Alpha RF2 French descriptions for Tier~2 matching,\ but its Tier~1 training frequency dictionary is built from English MIMIC-IV annotations only,\ giving it asymmetric French capability.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+\input{hybrid_pipeline_simple.tex}

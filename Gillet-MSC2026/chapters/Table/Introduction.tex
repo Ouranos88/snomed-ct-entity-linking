@@ -1,0 +1,121 @@
+% ============================================================
+% CHAPTER 1: INTRODUCTION
+% ============================================================
+
+
+\section{Context of the Problem}
+
+\subsection{The Challenge of Clinical Documentation Coding}
+
+The healthcare industry generates an enormous volume of clinical documentation daily, ranging from discharge letters to examination reports and clinical notes. Within this documentation lies critical patient information that must be accurately coded using standardized medical terminologies to ensure interoperability, quality of care, and proper billing.
+
+SNOMED CT (Systematized Nomenclature of Medicine -- Clinical Terms) has emerged as the most comprehensive clinical terminology system worldwide, containing over 350,000 active concepts covering diseases, procedures, anatomy, and other health-related information.
+
+\subsection{The Problem at Cliniques Universitaires Saint-Luc}
+
+At the Cliniques universitaires Saint-Luc in Brussels, Belgium, physicians currently face a significant challenge with manual SNOMED CT coding on a daily basis. The manual encoding process presents several critical issues:
+
+\begin{itemize}
+    \item \textbf{Time-consuming:} Physicians devote a non-trivial portion of each consultation to searching for appropriate codes, a burden that has been documented in EHR usability studies as a contributor to clinician burnout. % TODO: add citation on EHR usability / clinician burnout if available
+    \item \textbf{Error-prone:} High error rates due to human fatigue and the complexity of SNOMED CT
+    \item \textbf{Workflow bottlenecks:} Coding delays impact clinical documentation completeness
+    \item \textbf{Inadequate tools:} While the Epic electronic health record (EHR) system is deployed, its built-in SNOMED CT coding assistance has proven insufficient for French-language medical documents
+\end{itemize}
+
+\subsection{Why Is SNOMED CT Coding So Difficult?}
+
+The complexity of this coding task stems from multiple interconnected factors. Medical language is highly specialized and ambiguous, with the same clinical concept often expressed through multiple synonyms, abbreviations, or contextual variations. SNOMED CT itself is a massive hierarchical ontology requiring deep understanding to navigate correctly. Furthermore, clinical narratives contain negations, uncertainties, temporal information, and contextual nuances that must be accurately interpreted. The challenge is compounded in multilingual settings: while SNOMED CT has robust English support, resources for other languages including French remain limited.
+
+\subsection{The Heterogeneous Landscape of Automated Solutions}
+
+The automation of SNOMED CT coding has attracted considerable research attention over the past two decades, resulting in a heterogeneous landscape of computational approaches ranging from traditional dictionary-based matching to modern deep learning architectures. Existing methods show substantial performance variability, ranging from approximately 42\% to over 90\%, with no single approach dominating across all contexts. A detailed analysis of these approaches is provided in Chapter 2.
+
+\subsection{Critical Observations and Research Gaps}
+
+Several critical observations emerge from this landscape. No single approach dominates across all contexts. Research has been predominantly English-centric, raising questions about transferability to other languages. Evaluation metrics vary widely across studies, complicating cross-paper comparisons. Finally, fundamental task definitions remain ambiguous, with different works conflating entity recognition, concept normalisation, and full coding under the same label. Despite recent advances, significant gaps remain in French medical language processing, ophthalmological specialization, and practical deployment considerations. These gaps and their implications are analyzed in detail in Chapter 2.
+
+\subsection{Thesis Approach}
+
+This thesis addresses these gaps by focusing on the automatic recognition and generation of SNOMED CT codes from French-language ophthalmological documents at the Cliniques universitaires Saint-Luc.
+
+This thesis adopts a \textbf{pragmatic comparative approach} that prioritises real-world applicability and clinical deployment over architectural novelty, a design choice well-suited to the urgent operational need at Saint-Luc:
+\begin{enumerate}
+    \item \textbf{Select} the most promising existing methods based on literature review
+    \item \textbf{Adapt} these methods to French medical language and ophthalmological context
+    \item \textbf{Evaluate} their performance on real clinical data
+    \item \textbf{Recommend} deployment-ready solutions based on evaluation results
+\end{enumerate}
+
+This approach prioritizes practical applicability and real-world deployment over theoretical novelty, addressing the urgent need at Saint-Luc for effective automated SNOMED CT coding.
+
+\section{Research Question and Hypotheses}
+
+\subsection{Research Question}
+
+The central research question guiding this work is:
+
+\begin{quote}
+\textit{Which computational approaches for automatic SNOMED CT coding can be effectively adapted to French-language ophthalmological reports, and what are their comparative performances in a real clinical setting?}
+\end{quote}
+
+This question encompasses several sub-questions:
+\begin{enumerate}
+    \item What are the specific linguistic and clinical challenges posed by French ophthalmological documentation compared to English general medical text?
+    \item How do leading approaches from the literature perform when adapted to this specific context?
+    \item What adaptations are necessary to transfer methods trained primarily on English data to French medical language?
+    \item Which evaluation metrics are most meaningful for assessing clinical utility rather than pure technical performance?
+\end{enumerate}
+
+\subsection{Working Hypotheses}
+
+Based on the literature review and preliminary analysis, we formulate the following working hypotheses:
+
+\textbf{H1: Deep learning and BERT-based approaches will outperform dictionary-based methods.}
+Literature analysis suggests that modern neural architectures (Deep Learning: 81.5\%, BERT: 70.7\%) substantially outperform dictionary-based methods (50.1\%). We hypothesize this performance gap will persist in French ophthalmological text, as dictionary approaches struggle with linguistic variations and contextual disambiguation prevalent in clinical language.
+
+\textbf{H2: Hybrid approaches combining rules with machine learning will offer the best balance of performance and interpretability.}
+Hybrid methods demonstrate stable performance (74.9\%) with moderate variance. We hypothesize that incorporating domain-specific rules alongside data-driven learning will prove valuable for clinical deployment where interpretability is critical, particularly given limited annotated French medical data.
+
+\textbf{H3: The scope of the entity extraction prompt significantly affects the detection of comorbidities and systemic conditions in LLM-based methods.}
+LLM-based pipelines rely on a natural language prompt to instruct the model on what to extract. We hypothesize that an under-specified prompt focused on primary ophthalmic findings will systematically miss systemic comorbidities (hypertension, thyroid conditions) that appear in the patient history section of the note, and that an explicit scope instruction covering all clinical problems will meaningfully increase recall on such conditions.
+
+\textbf{H4: Adaptation from English to French requires more than direct translation of training data.}
+French medical language exhibits distinct morphological, syntactic, and terminological characteristics. We hypothesize that approaches utilizing French biomedical pre-trained models (e.g., CamemBERT, DrBERT) or cross-lingual transfer learning will outperform naive translation-based methods.
+
+\subsection{Research Environment: Cliniques Universitaires Saint-Luc}
+
+This research is conducted in collaboration with the ophthalmology department at the Cliniques universitaires Saint-Luc, a major academic hospital in Brussels, Belgium. Saint-Luc has implemented the Epic EHR system, which includes a problem list feature requiring SNOMED CT coding. However, the current coding assistance tools have proven inadequate, leading to:
+
+\begin{itemize}
+    \item High manual coding burden on physicians
+    \item Significant time expenditure on administrative tasks
+    \item Elevated error rates in code assignment
+    \item Incomplete or missing codes in patient records
+    \item Inconsistency in coding practices across clinicians
+\end{itemize}
+
+The hospital is providing access to anonymized ophthalmological reports for this research, including:
+\begin{itemize}
+    \item Discharge letters (\textit{lettres})
+    \item Clinical notes (\textit{notes})
+    \item Examination reports
+    \item Existing SNOMED CT codes assigned by physicians
+\end{itemize}
+
+All data have been de-identified in compliance with GDPR regulations and institutional review board requirements. Six anonymised ophthalmological PDF documents were obtained from Cliniques universitaires Saint-Luc and used for qualitative evaluation in this thesis.
+
+\section{Thesis Outline}
+
+This thesis is structured as follows:
+
+\textbf{Chapter 1: Introduction} (current chapter) establishes the context and motivation for automatic SNOMED CT coding in French ophthalmological reports. It presents the research question, working hypotheses, and the clinical environment at Saint-Luc that frames this work.\\
+\\
+\textbf{Chapter 2: Related Work} provides a comprehensive literature review of computational approaches for SNOMED CT coding. It describes the methodology used to identify relevant studies, presents a descriptive analysis of each major approach, conducts a comparative evaluation across techniques, and synthesizes key findings to identify research gaps and opportunities.\\
+\\
+\textbf{Chapter 3: Methodology} details the experimental approach adopted in this thesis. It justifies the selection of specific methods for implementation based on the literature review, describes necessary adaptations for French medical text, presents the experimental setup including data preprocessing and annotation, and defines evaluation metrics appropriate for clinical deployment.\\
+\\
+\textbf{Chapter 4: Implementation} documents the technical details of implementing selected approaches. It covers data preprocessing pipelines, model architectures and training procedures, adaptation strategies for French language, and technical challenges encountered during development.\\
+\\
+\textbf{Chapter 5: Results and Discussion} presents quantitative performance results across different approaches and evaluation metrics. It includes qualitative error analysis to understand failure modes, a qualitative evaluation on six real French ophthalmological PDFs from Saint-Luc, a semi-quantitative evaluation on 36 structured French clinical cases from medical textbooks spanning ophthalmology and cardiology (Phase~2b, 270 gold annotations), and discussion of practical deployment considerations.\\
+\\
+\textbf{Chapter 6: Conclusion and Future Work} synthesises the key findings of the research, provides a structured assessment of the four working hypotheses against the experimental evidence, identifies the principal limitations of the current work, and proposes long-term directions for future research.

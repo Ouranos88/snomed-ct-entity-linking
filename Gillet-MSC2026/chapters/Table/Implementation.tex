@@ -1,0 +1,378 @@
+% ============================================================
+% CHAPTER 4: IMPLEMENTATION
+% ============================================================
+
+This chapter documents the technical implementation of the four methods described in Chapter~3. For each method, we describe the build phase (artefacts constructed once, offline), the inference phase (applied per note at prediction time), key design decisions, and the engineering challenges encountered during development. The codebase comprises nine Python modules totalling approximately 3\,350 lines of code, located under the \texttt{Link/} directory. The full source code is available at: [REPOSITORY URL: TODO: add GitHub link before submission]. % TODO: Insert public repository URL here before submission.
+
+\section{Shared Infrastructure}
+
+\subsection{Module Overview}
+
+The pipeline is organised as a Python package with the following modules:
+
+\begin{itemize}
+    \item \texttt{preprocessor.py} — shared text normalisation, span candidate generation, and negation detection
+    \item \texttt{method1\_dictionary.py} — three-tier dictionary matching
+    \item \texttt{method2\_sapbert.py} — SapBERT bi-encoder with FAISS index
+    \item \texttt{method3\_llm\_rag.py} — LLM entity extraction + SNOMED RAG
+    \item \texttt{method4\_hybrid.py} — hybrid LLM NER with tiered dictionary
+    \item \texttt{evaluator.py} — evaluation metrics (mIoU, MRR, NDCG, Hits@k, Span F1)
+    \item \texttt{run\_pipeline.py} — end-to-end CLI orchestrator
+    \item \texttt{annotate\_pdf.py} — PDF extraction and annotation tool
+    \item \texttt{app.py} — Streamlit web interface
+    \item \texttt{voice\_app.py} — voice-driven annotation prototype (proof of concept)
+\end{itemize}
+
+All heavy dependencies (PyTorch, FAISS, sentence-transformers) are imported lazily using a \texttt{\_lazy\_imports()} pattern, allowing any module to be imported for inspection even when not all dependencies are installed. The evaluator and dictionary modules have no neural dependencies and can run on any machine.
+
+\subsection{Shared Preprocessing Module}
+
+One encoding constraint governs all CSV data loading: the character offset columns in the annotations file are stored as floating-point values (\eg\ \texttt{142.0}) rather than integers, requiring an explicit two-step cast (\texttt{int(float(value))}) before any span-level operation. This is handled transparently by the shared preprocessing module and has no effect on evaluation results.
+
+The \texttt{preprocessor.py} module implements two functions shared by all methods: \texttt{normalize\_text()} and \texttt{extract\_candidate\_spans()}.
+
+\subsubsection{Text Normalisation}
+
+\texttt{normalize\_text()} applies the four-step normalisation described in Chapter~3. The implementation preserves character offsets by replacing each character individually (never inserting or deleting characters, only substituting one-for-one), so that positions in the normalised text remain identical to positions in the original CSV text:
+
+\begin{minted}[fontsize=\small, breaklines, frame=lines]{python}
+def normalize_text(text: str) -> str:
+    text = unicodedata.normalize("NFC", text)
+    text = text.replace("\u00a0", " ").replace("\t", " ").replace("\f", " ")
+    text = re.sub(r" {2,}", " ", text)
+    text = "\n".join(line.rstrip() for line in text.split("\n"))
+    return text
+\end{minted}
+
+\subsubsection{Candidate Span Generation}
+
+\texttt{extract\_candidate\_spans()} implements a sliding window over whitespace-delimited tokens, generating all sub-sequences of 1 to \texttt{max\_tokens} (default: 8) consecutive tokens. Each candidate is validated by \texttt{\_is\_valid\_span()}, which filters out: spans shorter than 4 characters, spans containing newlines (OCR table artefacts), purely numeric strings (lab values, dates), spans composed entirely of stopwords, and spans whose first token is a stopword:
+
+\begin{minted}[fontsize=\small, breaklines, frame=lines]{python}
+def extract_candidate_spans(text, min_tokens=1, max_tokens=8):
+    tokens = [(m.group(), m.start(), m.end())
+              for m in re.finditer(r"\S+", text)]
+    spans = []
+    for i in range(len(tokens)):
+        for j in range(i + min_tokens, min(i + max_tokens + 1, len(tokens) + 1)):
+            span_start = tokens[i][1]
+            span_end   = tokens[j - 1][2]
+            span_text  = text[span_start:span_end].strip("|:- ").strip()
+            if _is_valid_span(span_text):
+                spans.append((span_start, span_end, span_text))
+    return spans
+\end{minted}
+
+A bilingual stopword list covering common English and French function words is maintained as a frozen set. Medical abbreviations such as \texttt{AV}, \texttt{PIO}, \texttt{OD} are intentionally \textit{not} included in the stopword list, since they correspond to clinically significant concepts in ophthalmological text.
+
+\section{Method 1: Three-Tier Dictionary Matching}
+
+\subsection{Architecture}
+
+Method~1 implements a purely symbolic entity linking pipeline with no neural components. Its two phases are:
+
+\begin{itemize}
+    \item \textbf{Build phase (offline):} Construct a three-tier lookup dictionary from training annotations and SNOMED RF2 descriptions; serialise to a JSON file.
+    \item \textbf{Inference phase:} For each note, generate candidate spans via the sliding window, look up each span in the dictionary using the three-tier chain, resolve overlapping predictions, and return top-5 candidates per span.
+\end{itemize}
+
+\subsection{Dictionary Key Normalisation}
+
+A uniform normalisation function \texttt{\_norm\_key()} converts any text string into a dictionary key:
+
+\begin{minted}[fontsize=\small, breaklines, frame=lines]{python}
+def _norm_key(text: str) -> str:
+    text = unicodedata.normalize("NFC", text).lower()
+    text = re.sub(r"[^\w\s]", " ", text)   # punctuation -> space
+    text = re.sub(r"\s+", " ", text).strip()
+    return text
+\end{minted}
+
+This function is applied both during dictionary construction (to index keys) and during inference (to query keys), guaranteeing consistent matching. Importantly, it is applied only to the \textit{span text} for lookup, not to the character positions in the note, which always reference the original text.
+
+\subsection{Build Phase: Tier Construction}
+
+\textbf{Tier~1 (Train Frequency Dictionary).} The training annotations are read and grouped by normalised span text. For each normalised key, a frequency counter records how often each concept identifier was used with that span across the 200 training notes:
+
+\begin{minted}[fontsize=\small, breaklines, frame=lines]{python}
+def build_from_annotations(annotations_csv: str) -> Dict[str, Counter]:
+    mapping = defaultdict(Counter)
+    with open(annotations_csv, newline="", encoding="utf-8") as f:
+        for row in csv.DictReader(f):
+            if row.get("annotation_type", "train").lower() != "train":
+                continue
+            key = _norm_key(row["span"])
+            mapping[key][row["concept_id"]] += 1
+    return dict(mapping)
+\end{minted}
+
+At inference time, the score for a Tier~1 match is the normalised frequency: the count for the matched concept divided by the total count across all concepts seen with that span. This gives scores in $[0, 1]$ and correctly handles polysemous spans (where the same surface form maps to multiple concepts with different probabilities).
+
+\textbf{Tier~2 (SNOMED RF2 Synonyms).} All active descriptions from the English SNOMED CT International Release and optionally the French Belgian Alpha Release are loaded and indexed by their normalised text. Only keys not already present in Tier~1 are added, since Tier~1 provides more specific signal for spans observed in training. Each Tier~2 match returns a fixed score of $0.95$, reflecting that a SNOMED official synonym is highly reliable but not empirically validated on the training distribution. This value was chosen to ensure Tier~2 matches rank below Tier~1 matches in candidate scoring while remaining competitive, reflecting the higher specificity of training-observed spans over ontology-derived synonyms.
+
+\textbf{Tier~3 (Fuzzy Fallback).} Tier~3 is not precomputed: at inference time, if neither Tier~1 nor Tier~2 yields an exact match, \path{rapidfuzz.process.extract()} searches the set of Tier~1 keys using the \path{token_sort_ratio} scorer with a minimum score cutoff of $85$. This scorer is robust to word-order permutations (\eg\ ``macular oedema diabetic'' will match ``diabetic macular oedema'') and handles minor spelling variants. Matched keys are resolved to their concept identifiers through the Tier~1 dictionary. The Tier~3 score is the fuzzy ratio scaled by $0.85$, capping all fuzzy matches below both exact tiers.
+
+Crucially, fuzzy matching is applied \textit{only against Tier~1 keys} (approximately 5\,000 entries), not against the full RF2 synonym index (over 1\,000\,000 entries). A search over the full RF2 index would be computationally prohibitive at inference time and would generate excessive false positives.
+
+\subsection{Inference Phase}
+
+The inference function applies the three-tier chain to every candidate span generated by the sliding window:
+
+\begin{minted}[fontsize=\small, breaklines, frame=lines]{python}
+for start, end, span_text in candidates_spans:
+    if skip_negated and is_negated(note_text, start):
+        continue
+    norm = _norm_key(span_text)
+    candidates = _lookup_exact(norm, dictionary)      # Tier 1 + 2
+    if candidates is None:
+        candidates = _lookup_fuzzy(norm, dictionary, fuzzy_keys)  # Tier 3
+    if candidates:
+        predictions.append({"start": start, "end": end,
+                            "span": span_text, "candidates": candidates})
+\end{minted}
+
+\subsection{Span Overlap Resolution}
+
+A greedy left-to-right algorithm resolves overlapping predictions: spans are sorted by start offset, then by descending top-1 score. A prediction is retained only if it starts at or after the end of the last retained prediction. If a subsequent span overlaps the current one and has a strictly higher top-1 score, it replaces the current entry. This resolution is applied identically in Methods~1 and~2.
+
+\section{Method 2: SapBERT Bi-encoder with FAISS}
+
+\subsection{Architecture}
+
+Method~2 extends Method~1 by replacing the dictionary lookup with a semantic nearest-neighbour search in embedding space. The pipeline uses SapBERT~\cite{Kulyabin:2024} (a BERT-based model pre-trained on UMLS medical entity pairs) to embed both SNOMED concept descriptions and clinical spans, then uses FAISS for efficient maximum inner product search.
+
+The method's inference phase was ultimately redesigned as a \textbf{hybrid architecture}: Method~1's dictionary acts as a span pre-filter (NER surrogate), and SapBERT is applied only for concept linking on the pre-filtered spans. The motivation for this redesign, and the sequence of problems that led to it, are documented in Section~\ref{sec:m2-problems}.
+
+\subsection{Index Construction}
+
+The build phase encodes all SNOMED CT synonyms with SapBERT and indexes them in a FAISS \texttt{IndexFlatIP} (inner product) index. A key implementation decision is that \textbf{each synonym is indexed as a separate vector} rather than aggregating synonyms per concept. This matches how SapBERT was trained: the model learns to place all names of the same entity near each other in the embedding space, so searching for the nearest synonym, rather than a concept centroid, is the correct retrieval strategy:
+
+\begin{minted}[fontsize=\small, breaklines, frame=lines]{python}
+for cid, terms in concept_terms.items():
+    for term in terms[:8]:         # cap at 8 synonyms per concept
+        concept_ids.append(cid)
+        concept_texts.append(term)
+# result: 1,383,762 vectors for ~370,000 concepts
+\end{minted}
+
+Embeddings are L2-normalised before indexing, converting the inner product search to cosine similarity. The resulting index contains 1\,383\,762 vectors and occupies approximately 4.2~GB of memory.
+
+\subsection{Hybrid Span Pre-filtering}
+
+When a Method~1 dictionary is provided, the inference function filters the sliding-window candidates to retain only spans that have an exact match in Tier~1 or Tier~2. This step is the central design decision of Method~2:
+
+\begin{minted}[fontsize=\small, breaklines, frame=lines]{python}
+if dictionary is not None:
+    tier1 = dictionary["tier1"]
+    tier2 = dictionary["tier2"]
+    candidate_spans = [
+        s for s in candidate_spans
+        if _norm_key(s[2]) in tier1 or _norm_key(s[2]) in tier2
+    ]
+    min_score = 0.0   # every retained span is a valid entity; no threshold
+\end{minted}
+
+Only dictionary-recognised spans are then passed to SapBERT for concept embedding and FAISS retrieval. This effectively decouples the NER component (Method~1) from the linking component (SapBERT), using Method~1 as a high-precision span gate and SapBERT as a more semantically sophisticated linker.
+
+\subsection{Key Engineering Problems}
+\label{sec:m2-problems}
+
+Four significant problems were encountered during the development of Method~2.
+
+\begin{sloppypar}
+\textbf{Problem~1: Model removed from HuggingFace Hub.} The original design specified \path{cambridgeltl/SapBERT-from-PubMed-abstract} (English-only). This model was deleted from the HuggingFace Hub before development began. The replacement used is \path{cambridgeltl/SapBERT-UMLS-2020AB-all-lang-from-XLMR}, a multilingual variant trained on UMLS across 200 languages. This change has a positive side effect for Phase~2: the multilingual model encodes French medical text natively, without requiring translation.
+\end{sloppypar}
+
+\textbf{Problem~2: Missing transitive dependencies.} PyPI's package metadata for \texttt{transformers} did not declare \texttt{sentencepiece} and \texttt{protobuf} as required, even though the XLM-R tokeniser underlying SapBERT-UMLS requires them. The \texttt{AutoTokenizer.from\_pretrained()} call failed at runtime with a cryptic \texttt{ImportError}. These two packages must be installed explicitly alongside \texttt{transformers} and \texttt{torch}.
+
+\textbf{Problem~3: Per-concept versus per-synonym indexing.} The initial implementation stored one embedding per concept (computed as the mean of its synonym embeddings). This produced an index of approximately 370\,000 vectors. Retrieval quality was poor because concept centroids in embedding space do not correspond to meaningful medical descriptions: SapBERT's similarity structure is designed for individual synonym strings. Switching to one vector per synonym (capped at 8 per concept) expanded the index to 1\,383\,762 vectors and substantially improved retrieval recall.
+
+\textbf{Problem~4: Anisotropy with unconstrained sliding window.} When SapBERT was applied to all spans from the sliding window (without the dictionary pre-filter), every arbitrary text window was assigned a plausible SNOMED concept by the FAISS search. The bi-encoder cannot output ``no match'': it always returns the $k$ nearest neighbours. On a 10\,000-character note with a window width of 1--8 tokens, the sliding window generates tens of thousands of candidate spans, of which the vast majority have no medical meaning. Each of these receives a high-confidence FAISS result pointing to some SNOMED concept, producing thousands of false positives and collapsing precision to near zero. With the dictionary pre-filter, mIoU improved from approximately 0.0005 to 0.112, a factor of more than 200.
+
+\section{Method 3: LLM NER with SNOMED RAG}
+
+\subsection{Architecture}
+
+Method~3 replaces the sliding-window span generation of Methods~1 and~2 with a large language model (LLM) that reads the full note text and extracts clinically meaningful entities in context. It then retrieves SNOMED candidates via a FAISS index built with \texttt{multilingual-e5-large}, and uses the LLM a second time to rerank the candidates using the surrounding clinical context. The LLM used is \texttt{llama3.1:8b} (Meta), running locally via Ollama with no external API calls, satisfying the privacy requirements for clinical data. % TODO: Specify quantisation level, latency, and model variant (base vs.\ instruction-tuned) before submission.
+
+\subsection{SNOMED Index Construction}
+
+The RAG index is built using the \texttt{intfloat/multilingual-e5-large} sentence encoder rather than SapBERT. This choice reflects different priorities: while SapBERT is optimised for medical synonym matching, multilingual-e5-large provides superior general-purpose dense retrieval across languages, making it better suited to matching free-text clinical descriptions to SNOMED concept names. The index stores one vector per concept (using the preferred term), totalling 529\,801 concept embeddings.
+
+\subsection{Stage~1: LLM Entity Extraction}
+
+The note text is sent to the LLM with a structured prompt that instructs it to extract medical entity spans verbatim and classify their semantic type (disorder, finding, procedure, body structure, substance, observable entity). The LLM returns a JSON list of extracted entities.
+
+A critical implementation constraint governs offset recovery: \textbf{LLM-reported character positions are never trusted}. Language models are prone to hallucinating character offsets, particularly in long documents. Instead, each entity span returned by the LLM is located in the original note text using \texttt{str.find()}, falling back to \texttt{rapidfuzz} fuzzy matching if no exact occurrence is found. This ensures that all reported offsets are verifiable against the actual note text. A known limitation of this approach is that if the extracted entity string appears multiple times in the note, \texttt{str.find()} returns the first occurrence, which may not correspond to the intended mention.
+
+\subsection{Stage~2: FAISS Candidate Retrieval}
+
+Each extracted span is encoded with multilingual-e5-large and the top~20 nearest SNOMED concepts are retrieved from the FAISS index. A semantic type filter is optionally applied: if the LLM classified the span as a ``disorder'', only SNOMED concepts from the disorder hierarchy are considered. This reduces the candidate set to semantically coherent options before reranking. For all benchmark results reported in Chapter~5, the semantic type filter was \textbf{disabled}: the FAISS search (\texttt{rag\_index.search}) receives only the span text and returns all concept types unfiltered; the \texttt{entity\_type} label assigned by the LLM is passed forward to the reranking step but is not used to constrain the candidate set.
+
+\subsection{Stage~3: LLM Candidate Reranking}
+
+The top~20 FAISS candidates are presented to the LLM together with the surrounding clinical context (three sentences before and after the span). The LLM is asked to select the best-matching SNOMED concept and return a confidence assessment. The reranking prompt is structured to force JSON output and prevent hallucination of concept identifiers not present in the candidate list. The exact prompts used for NER and reranking are documented in Appendix~\ref{app:prompts}, Sections~\ref{sec:m3ner}--\ref{sec:m4rerank}.
+
+\subsection{Method~4*: Improved NER Prompt Scope}
+
+M4* is a variant of Method~4 in which the NER prompt is modified to explicitly instruct the model to capture systemic comorbidities (such as hypertension and thyroid conditions) appearing in the patient history section of the note, in addition to primary ophthalmological findings. The prompt modification also introduces note chunking to handle longer documents: notes exceeding 12\,000 characters are split into overlapping chunks (500-character overlap) and each chunk is processed independently, replacing the previous hard truncation at 8\,000 characters. The complete prompts for both the original scope (M4) and expanded scope (M4*) are reproduced in Appendix~\ref{app:prompts}, Sections~\ref{sec:m4ner} and~\ref{sec:m4starner} respectively.
+
+The original and modified prompts are shown in Appendix~\ref{app:prompts}. The impact of this modification on French PDF performance is discussed in Section~5.2, where M4* raises the match rate from 43.8\% to 56.3\% relative to the Epic-validated diagnosis list.
+
+\section{Method 4: Hybrid LLM NER with Tiered Dictionary}
+\label{sec:m4}
+
+\subsection{Motivation and Architecture}
+
+Method~4 was designed after observing that Methods~1 and~3 have complementary failure modes:
+
+\begin{itemize}
+    \item Method~1 has high concept precision (MRR~0.7341 when a span is matched) but limited span recall: the sliding window misses contextually complex entities and is blind to multi-sentence clinical summaries.
+    \item Method~3 has better span identification (the LLM understands \textit{what is clinically important} in a note) but lower concept precision: the pure FAISS retrieval sometimes returns semantically adjacent but technically incorrect concepts.
+\end{itemize}
+
+Method~4 addresses both weaknesses by combining LLM-driven span detection (from Method~3) with the three-tier dictionary linking (from Method~1), falling back to FAISS only when the dictionary has no match:
+
+\begin{center}
+\begin{minipage}{0.85\linewidth}
+\textbf{For each LLM-extracted span:}
+\begin{enumerate}
+    \item \textbf{Tier~1}: exact match in train frequency dictionary $\rightarrow$ use directly
+    \item \textbf{Tier~2}: exact match in SNOMED RF2 synonyms $\rightarrow$ merge with FAISS top-5
+    \item \textbf{Tier~3}: fuzzy match (rapidfuzz $\geq 85$) $\rightarrow$ FAISS as confirmation
+    \item \textbf{No match}: FAISS only (handles out-of-vocabulary entities such as rare eponyms)
+\end{enumerate}
+\end{minipage}
+\end{center}
+
+The method reuses the artefacts of both Method~1 (dictionary JSON) and Method~3 (FAISS index), with no additional build step. An optional LLM reranking step (batched to reduce API calls: up to 8 spans per LLM call) can be activated for Tier~2 and above, using the same clinical context as Method~3. Figure~\ref{fig:m4_architecture} illustrates the full pipeline.
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[
+  node distance=0.55cm and 1.1cm,
+  box/.style={draw, rounded corners=4pt, fill=#1, minimum width=2.6cm,
+              minimum height=0.65cm, align=center, font=\small},
+  decision/.style={draw, diamond, aspect=2.2, fill=yellow!25,
+                   minimum width=2.8cm, minimum height=0.7cm,
+                   align=center, font=\scriptsize},
+  arr/.style={->, thick, gray!70},
+  lbl/.style={font=\scriptsize, midway}
+]
+
+% Input
+\node[box=blue!15] (input) {Clinical note (raw text)};
+
+% LLM NER
+\node[box=blue!30, below=of input] (ner) {LLM NER\\(\texttt{llama3.1:8b})};
+\draw[arr] (input) -- (ner);
+
+% Span
+\node[box=gray!15, below=of ner] (span) {Candidate spans};
+\draw[arr] (ner) -- (span) node[lbl, right]{$\sim$35 per note};
+
+% Prefix trim
+\node[box=orange!20, below=of span] (trim) {Abbrev.\ expand + prefix trim};
+\draw[arr] (span) -- (trim);
+
+% Tier 1 check
+\node[decision, below=of trim] (t1) {Tier 1\\match?};
+\draw[arr] (trim) -- (t1);
+
+% Tier 1 output
+\node[box=green!25, right=1.6cm of t1] (t1out) {Dict candidates\\(score 1.0)};
+\draw[arr] (t1) -- node[above, font=\scriptsize]{Yes} (t1out);
+
+% Tier 2 check
+\node[decision, below=of t1] (t2) {Tier 2\\match?};
+\draw[arr] (t1) -- node[right, font=\scriptsize]{No} (t2);
+
+% Tier 2 output
+\node[box=green!20, right=1.6cm of t2] (t2out) {RF2 synonym\\(score 0.95)};
+\draw[arr] (t2) -- node[above, font=\scriptsize]{Yes} (t2out);
+
+% Fuzzy check
+\node[decision, below=of t2] (t3) {Fuzzy\\match?};
+\draw[arr] (t2) -- node[right, font=\scriptsize]{No} (t3);
+
+% Fuzzy output
+\node[box=yellow!30, right=1.6cm of t3] (t3out) {Fuzzy + FAISS};
+\draw[arr] (t3) -- node[above, font=\scriptsize]{Yes} (t3out);
+
+% FAISS only
+\node[box=red!20, below=of t3] (faiss) {FAISS only};
+\draw[arr] (t3) -- node[right, font=\scriptsize]{No} (faiss);
+
+% Merge
+\node[box=gray!20, below=1.1cm of faiss] (merge) {Merge candidates};
+\draw[arr] (t1out.south) -- ++(0,-0.25) -| (merge.north);
+\draw[arr] (t2out.south) -- ++(0,-0.25) -| (merge.north);
+\draw[arr] (t3out.south) -- ++(0,-0.25) -| (merge.north);
+\draw[arr] (faiss) -- (merge);
+
+% Reranking
+\node[box=purple!20, below=of merge] (rerank) {LLM reranking\\(optional, batched)};
+\draw[arr] (merge) -- (rerank);
+
+% Output
+\node[box=blue!20, below=of rerank] (output) {Top-5 SNOMED candidates};
+\draw[arr] (rerank) -- (output);
+
+\end{tikzpicture}
+\caption{Method~4 inference pipeline. Each LLM-extracted span passes through a three-tier lookup chain (Tier~1: training frequency dictionary; Tier~2: SNOMED RF2 synonyms including Belgian French; Tier~3: fuzzy match) before falling back to FAISS retrieval. Candidates from all tiers are merged and optionally reranked by the LLM.}
+\label{fig:m4_architecture}
+\end{figure}
+
+\subsection{Engineering Problems Encountered}
+
+Five bugs were identified and resolved during the development of Method~4, each illustrating a different class of failure in LLM-assisted pipelines.
+
+\textbf{Bug~1: LLM-expanded abbreviations breaking dictionary lookup.} The LLM Stage~1 prompt sometimes caused the model to return expanded forms of abbreviations rather than verbatim text (\eg\ returning ``acuité visuelle'' instead of ``AV'' as it appears in the note). Since the dictionary is keyed on the normalised verbatim form, the expanded form never matched Tier~1 or Tier~2, forcing an unnecessary FAISS fallback. The fix was to add an explicit instruction in the prompt: ``Return the \textit{exact} text as it appears in the note, including abbreviations.''
+
+\textbf{Bug~2: Single-token spans silently dropped by FAISS.} The FAISS retrieval function for Method~3 had a minimum token length guard that silently skipped spans of a single token. Medical abbreviations (\eg\ ``DMLA'', ``HTA'', ``RGO'') are frequently single tokens in French clinical text. These were never sent to FAISS and received no candidates, appearing as empty predictions. The guard was removed for Method~4, with a minimum character length of four substituted instead.
+
+\textbf{Bug~3: Noise filter eliminating medical abbreviations.} The \texttt{\_is\_valid\_span()} function in \texttt{preprocessor.py} rejected spans shorter than four characters to avoid function words. This correctly discarded ``du'', ``au'', and ``le'' but also incorrectly discarded three-character medical abbreviations such as ``IOP'', ``OAG'', and ``RVO''. The fix was to maintain a medical abbreviation whitelist that bypasses the length filter.
+
+\textbf{Bug~4: Erroneous FAISS match for ambiguous abbreviations.} The abbreviation ``CA'' (commonly used in ophthalmology for ``corneal abrasion'' or in general medicine for ``carcinoma'') was retrieved by FAISS as ``tinea profunda'', a superficial dermatological infection with no clinical relationship. FAISS operates purely on embedding similarity; the multilingual-e5-large embedding of the single token ``CA'' was closest to a Latin-derived dermatological term in the embedding manifold. This motivates the Tier~1/2 priority in Method~4: a trained dictionary would have resolved ``CA'' to the correct SNOMED concept without ever querying FAISS.
+
+\textbf{Bug~5: Inverted clinical filter in the Streamlit UI.} The function \texttt{\_is\_clinical()} in the web application was intended to filter out non-clinical SNOMED concepts (administrative codes, inactive legacy entries). A boolean logic inversion caused it to retain exactly the non-clinical concepts and discard the clinical ones, producing nonsensical output in the UI. The bug was detected during qualitative testing on the French PDFs when all top predictions for ``cataracte'' were administrative billing codes. The fix consisted of inverting the boolean condition in the filter predicate, ensuring that concepts flagged as clinical are retained rather than excluded.
+
+\subsection{Post-Phase~2 Engineering Improvements}
+\label{sec:m4-improvements}
+
+Three additional improvements to Method~4 were motivated by error analysis on the structured clinical case corpus (Phase~2b, Section~5.3). These improvements do not change the method's architecture but refine the dictionary lookup chain.
+
+\textbf{Improvement~1: French ligature normalisation.} The \texttt{\_norm\_key} hash function was extended to convert French and Latin ligatures before hashing: \texttt{œ}$\,\rightarrow\,$\texttt{oe} and \texttt{æ}$\,\rightarrow\,$\texttt{ae}. Without this fix, ``œdème'' and ``oedème'' hash to different keys, causing a guaranteed Tier~2 miss when the LLM extracts the ligature form while the Belgian RF2 stores the digraph form (or vice versa).
+
+\textbf{Improvement~2: Abbreviation expansion applied before Tier~1/2 lookup.} The \texttt{expand\_abbrevs} function was previously applied only to the FAISS query string. It is now also applied before the Tier~1/2 key lookup, so that ophthalmological abbreviations such as \texttt{OD} (\textit{œil droit}) and \texttt{CA} (\textit{chambre antérieure}) are expanded to their full forms before any dictionary lookup attempt. This ensures that a span of ``OD'' can match the Tier~2 entry for ``œil droit'' rather than falling through to FAISS.
+
+\textbf{Improvement~3: Progressive prefix trimming.} When a full extracted span fails to match any Tier~1 or Tier~2 key, Method~4 now retries progressively shorter token prefixes (minimum two tokens) before falling back to fuzzy matching or FAISS. For example, ``dyspnée d'effort ancienne'' fails as a full key but succeeds when trimmed to ``dyspnée d'effort'' (\texttt{60845006}, Dyspnea on exertion). This addresses a systematic mismatch between the LLM's tendency to extract complete clinical phrases with qualifying modifiers and the dictionary's canonical short-form entries.
+
+\section{Clinical Annotation Tools}
+
+\subsection{PDF Annotation Tool: \texttt{annotate\_pdf.py}}
+
+The \texttt{annotate\_pdf.py} script provides an end-to-end annotation pipeline for clinical PDF documents. Text extraction uses \texttt{pdfplumber} for electronically created PDFs and \texttt{pytesseract} with the French Tesseract language model for scanned or photographed pages. An automatic page classifier detects and excludes administrative pages, specifically ``Résultat Notereader'' pages (Epic's auto-generated NLP suggestions) and ``Liste de problèmes'' pages (the problem list already encoded by the physician), ensuring that only raw clinical narrative text is processed. Excluding these pages also precludes a direct comparison against Epic's built-in NLP suggestions, which were identified in Section~1.1.2 as insufficient for French text. This comparison is left as a direction for future work.
+
+SNOMED labels are displayed in French using the Belgian Alpha RF2 release, with automatic fallback to English when a French label is unavailable. A deduplication pass removes semantically redundant results: two predictions sharing more than 70\% of their constituent tokens and mapping to the same concept hierarchy are merged, retaining only the highest-confidence occurrence.
+
+\subsection{Streamlit Web Interface: \texttt{app.py}}
+
+The Streamlit interface allows clinicians to annotate documents interactively without command-line interaction. Its key features include:
+
+\begin{itemize}
+    \item Drag-and-drop PDF import or direct text input
+    \item Method selection (1--4) with a short description of each
+    \item A configurable confidence threshold slider to adjust result density
+    \item A priority keyword field: terms entered by the clinician are searched directly in SNOMED and surfaced at the top of the results, regardless of method output
+    \item Expansion of each result to show the full top-5 candidate list
+    \item CSV export of all predictions
+\end{itemize}
+
+The application runs entirely locally. No data is transmitted to external servers. All LLM inference (Methods~3 and~4) uses the Ollama local server with \texttt{llama3.1:8b}; all embedding and FAISS inference runs in-process on the local GPU or CPU. This architecture satisfies the data privacy requirements that govern patient data at Cliniques universitaires Saint-Luc.
+
+\subsection{Voice Prototype: \texttt{voice\_app.py}}
+
+As a proof of concept exploring a future interaction paradigm, a voice-driven variant of the annotation interface was implemented (\texttt{voice\_app.py}). The prototype uses the browser's built-in Web Speech API to transcribe live speech into text, then passes each committed phrase to Method~4 for SNOMED entity detection. Detected concepts are displayed as acceptance cards in real time; the clinician can confirm or reject each suggestion and export the accepted codes to CSV. The transcript area is editable, allowing the user to correct speech recognition errors before triggering a new detection pass.
+
+Two fundamental bottlenecks prevent this prototype from being clinically deployable in its current form. First, the Web Speech API relies on a general-purpose cloud ASR model (Google's speech-to-text backend) that has no knowledge of medical terminology: rare terms such as \textit{naevus chorioidien} or \textit{décollement de rétine} are regularly mistranscribed. Second, Method~4's LLM NER step introduces a latency of several seconds per phrase, which disrupts the real-time flow expected from a voice interface. The prototype therefore serves as a demonstrator of the target interaction model rather than a functional clinical tool. The engineering path to closing both gaps is outlined in the Future Work section of Chapter~6.

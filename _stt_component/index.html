@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 6px 8px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: transparent;
+  }
+  .row { display: flex; gap: 8px; align-items: center; }
+  button {
+    padding: 7px 18px; border: none; border-radius: 6px;
+    font-size: 14px; font-weight: 600; cursor: pointer; transition: opacity .15s;
+  }
+  button:disabled { opacity: .45; cursor: default; }
+  #startBtn { background: #ff4b4b; color: #fff; }
+  #stopBtn  { background: #555;    color: #fff; }
+  #status   { font-size: 12px; color: #aaa; margin-left: 4px; }
+  #live {
+    margin-top: 8px; padding: 8px 10px;
+    min-height: 38px;
+    border: 1px solid #333; border-radius: 6px;
+    font-size: 14px; line-height: 1.55;
+    color: #e0e0e0; background: #1a1a1a;
+    word-wrap: break-word;
+  }
+  .interim { color: #888; font-style: italic; }
+  #noapi   { color: #e57373; font-size: 13px; margin-top: 6px; }
+</style>
+</head>
+<body>
+<div class="row">
+  <button id="startBtn" onclick="start()">▶ Start</button>
+  <button id="stopBtn"  onclick="stop()" disabled>■ Stop</button>
+  <span   id="status"></span>
+</div>
+<div id="live"></div>
+<div id="noapi" style="display:none">
+  Speech recognition unavailable — please use Chrome or Edge.
+</div>
+
+<script>
+"use strict";
+
+const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+if (!SR) document.getElementById("noapi").style.display = "block";
+
+let recognition  = null;
+let finalText    = "";   // committed phrases this session
+let lang         = "fr-FR";
+
+// ── Streamlit component protocol ───────────────────────────────────────────
+function setHeight() {
+  window.parent.postMessage(
+    { isStreamlitMessage: true, type: "streamlit:setFrameHeight",
+      height: document.body.scrollHeight },
+    "*"
+  );
+}
+
+window.parent.postMessage(
+  { isStreamlitMessage: true, type: "streamlit:componentReady", apiVersion: 1 },
+  "*"
+);
+
+// Report height once DOM is ready and again after any content change
+document.addEventListener("DOMContentLoaded", setHeight);
+new MutationObserver(setHeight).observe(document.body, { childList: true, subtree: true, characterData: true });
+
+window.addEventListener("message", (e) => {
+  if (!e.data || e.data.type !== "streamlit:render") return;
+  const args = e.data.args || {};
+  if (args.language) lang = args.language;
+  setHeight();
+});
+
+function sendValue(val) {
+  window.parent.postMessage(
+    { isStreamlitMessage: true, type: "streamlit:setComponentValue", value: val },
+    "*"
+  );
+}
+
+// ── Live display helper ────────────────────────────────────────────────────
+function render(interim) {
+  const box = document.getElementById("live");
+  box.innerHTML =
+    finalText
+    + (interim ? '<span class="interim">' + interim + "</span>" : "");
+}
+
+// ── Recording control ──────────────────────────────────────────────────────
+function start() {
+  if (!SR) return;
+  finalText = "";
+  render("");
+
+  recognition = new SR();
+  recognition.lang             = lang;
+  recognition.continuous       = true;
+  recognition.interimResults   = true;
+  recognition.maxAlternatives  = 1;
+
+  recognition.onstart = () => {
+    document.getElementById("status").textContent = "🔴 recording…";
+    document.getElementById("startBtn").disabled = true;
+    document.getElementById("stopBtn").disabled  = false;
+  };
+
+  recognition.onresult = (e) => {
+    let interim = "";
+    for (let i = e.resultIndex; i < e.results.length; i++) {
+      const t = e.results[i][0].transcript;
+      if (e.results[i].isFinal) {
+        finalText += t + " ";
+        sendValue(finalText.trim());   // push committed phrase to Python
+      } else {
+        interim += t;
+      }
+    }
+    render(interim);
+  };
+
+  recognition.onerror = (e) => {
+    document.getElementById("status").textContent = "⚠ " + e.error;
+  };
+
+  recognition.onend = () => {
+    document.getElementById("status").textContent = "";
+    document.getElementById("startBtn").disabled = false;
+    document.getElementById("stopBtn").disabled  = true;
+    render("");
+  };
+
+  recognition.start();
+}
+
+function stop() {
+  if (recognition) recognition.stop();
+}
+</script>
+</body>
+</html>

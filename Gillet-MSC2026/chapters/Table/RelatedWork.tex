@@ -1,0 +1,593 @@
+% ============================================================
+% CHAPTER 2: RELATED WORK (VERSION COMPLÈTE AVEC TABLEAU)
+% ============================================================
+
+This chapter presents a comprehensive review of computational approaches for automatic SNOMED CT coding of clinical documents. We first describe the methodology used to identify and select relevant literature, then provide detailed descriptive analyses of individual approaches, followed by comparative analysis across methodological categories, and conclude with a synthesis identifying gaps and opportunities.
+
+\section{Literature Review Methodology}
+
+\subsection{Search Strategy}
+
+The literature review was conducted systematically across multiple academic databases (PubMed, IEEE Xplore, ACM Digital Library, arXiv, Google Scholar) using keywords including: SNOMED CT, medical concept extraction, clinical entity recognition, medical entity linking, clinical NLP, and automatic coding. We employed forward and backward citation tracking for seminal papers and monitored recent preprints to capture cutting-edge developments.
+
+\subsection{Inclusion and Exclusion Criteria}
+
+\textbf{Inclusion criteria:} Studies addressing automatic SNOMED CT coding, medical NER applicable to SNOMED coding, medical entity linking to clinical terminologies, comparative evaluations, and quantitative performance metrics (publications from 2008 onwards).
+
+\textbf{Exclusion criteria:} Non-clinical domains, ICD-only studies without SNOMED relevance, purely theoretical papers, and insufficient methodological detail.
+
+\subsection{Study Selection and Analysis}
+
+The search process yielded 21 primary studies meeting our criteria. Table~\ref{tab:snomed_conversion} summarizes these studies, documenting the primary task, input/output types, core technique, and reported success rates.
+
+\section{Descriptive Analysis of Approaches}
+
+This section provides detailed descriptions of the major approaches identified in the literature, organized by methodological category. For each approach, we describe the core technique, typical architecture, strengths, and weaknesses.
+
+\subsection{Dictionary-Based Approaches}
+
+Dictionary-based methods represent the earliest computational approaches to medical concept extraction and coding. These methods rely on lexical matching between text spans and entries in controlled vocabularies.
+
+\subsubsection{Core Methodology}
+
+Dictionary-based approaches typically involve:
+\begin{enumerate}
+    \item Constructing or acquiring a dictionary mapping text strings to SNOMED CT concepts
+    \item Preprocessing clinical text (tokenization, normalization)
+    \item Matching text spans against dictionary entries using exact or approximate string matching
+    \item Resolving ambiguities when multiple matches occur
+    \item Returning matched SNOMED CT codes
+\end{enumerate}
+
+\subsubsection{Representative Studies}
+
+\textbf{Davidson et al.\ \cite{Davidson:2025}} describe the KIRI system, which achieved 42.0\% mIoU (1st place in the SNOMED CT entity linking challenge) using a dictionary-based approach with external resource expansion and section partitioning. Their method expanded the dictionary using synonyms from UMLS (Unified Medical Language System) and employed document structure analysis to improve matching accuracy in different clinical note sections.\\
+
+\textbf{Cantón Simó (2024)~\cite{Canton:2024}} compared dictionary-based (KIRI) versus BERT-based approaches on MIMIC-IV discharge summaries, achieving 43.2\% mIoU with the dictionary method. The study highlighted that dictionary approaches excel at exact matches but struggle with paraphrases and contextual variations.\\
+
+\textbf{Rajput et al.~(2023)~\cite{Rajput:2023}} developed a semi-automated KNIME workflow using the Snowstorm SNOMED CT terminology server with Expression Constraint Language (ECL) queries. Retrieved 429 SNOMED CT terms from 30 microorganisms, demonstrating the utility of leveraging SNOMED CT's hierarchical structure for systematic mapping.\\
+
+\textbf{Metke-Jimenez \& Karimi~(2015)~\cite{MetkeJimenez:2015}} compared dictionary-based methods using Apache Lucene against other approaches for adverse drug reaction extraction, achieving 77.1\% precision but only 37.6\% recall, illustrating the classic precision-recall trade-off in dictionary methods.\\
+
+\subsubsection{Strengths and Weaknesses}
+
+\textbf{Strengths:}
+\begin{itemize}
+    \item High precision for exact matches
+    \item Fast inference with pre-computed dictionaries
+    \item No training data required
+    \item Easily interpretable results
+    \item Can leverage existing terminological resources (UMLS, SNOMED CT hierarchy)
+\end{itemize}
+
+\textbf{Weaknesses:}
+\begin{itemize}
+    \item Poor recall due to inability to handle paraphrases, synonyms, and morphological variations
+    \item Struggles with ambiguous terms and context-dependent meanings
+    \item Requires extensive manual curation of dictionaries
+    \item Cannot learn from data or adapt to domain-specific language
+    \item High variability in performance (std dev 13.0\%, average 50.1\%) as shown in Figure~\ref{fig:perf_technique}
+\end{itemize}
+
+\subsection{Machine Learning Approaches}
+
+Traditional machine learning methods use hand-crafted features and supervised learning algorithms for classification or sequence labeling tasks.
+
+\subsubsection{Core Methodology}
+
+ML approaches typically involve:
+\begin{enumerate}
+    \item Feature engineering: extracting linguistic, morphological, syntactic, and contextual features
+    \item Training supervised models (e.g., CRF, SVM, decision trees) on annotated data
+    \item Applying trained models to identify clinical entities or assign codes
+    \item Post-processing to map predictions to SNOMED CT codes
+\end{enumerate}
+
+\subsubsection{Representative Studies}
+
+\textbf{Kate (2020)~\cite{Kate:2020}} used probability-based ML with noisy-OR combination for full SNOMED CT concept conversion (including post-coordination). Achieved 32.2\% full conversion rate and 62.5\% partial conversion rate (allowing one error). This work addressed the challenging problem of compositional SNOMED concepts, not just simple code assignment.\\
+
+\textbf{Fung et al.~(2016)~\cite{Fung:2016}} employed lexical matching with MetaMap plus ontological alignment for mapping SNOMED CT surgical procedures to ICD-10-PCS. Achieved 45\% accuracy with lexical methods, 40\% with ontological methods, but 93\% when both methods agreed, suggesting ensemble benefits.\\
+
+\subsubsection{Strengths and Weaknesses}
+
+\textbf{Strengths:}
+\begin{itemize}
+    \item Can incorporate expert knowledge through feature design
+    \item Training is relatively fast compared to deep learning
+    \item Models are often interpretable
+    \item Work reasonably well with limited training data
+\end{itemize}
+
+\textbf{Weaknesses:}
+\begin{itemize}
+    \item Require extensive feature engineering
+    \item Cannot capture complex linguistic patterns without explicit features
+    \item Limited ability to generalize beyond training distribution
+    \item Average performance of 62.5\% (single study) lags behind modern approaches
+\end{itemize}
+
+\subsection{BERT-Based Approaches}
+
+BERT (Bidirectional Encoder Representations from Transformers) and its variants have become dominant in NLP tasks. For medical applications, biomedical variants like BioBERT, ClinicalBERT, SapBERT, and PubMedBERT are commonly used.
+
+\subsubsection{Core Methodology}
+
+BERT-based approaches typically employ:
+\begin{enumerate}
+    \item Pre-trained biomedical language models (BioBERT, SapBERT, etc.)
+    \item Fine-tuning on medical NER or entity linking tasks
+    \item Two-stage pipelines: (1) entity recognition, (2) entity linking to SNOMED codes
+    \item Embedding-based similarity matching for code assignment
+\end{enumerate}
+
+\subsubsection{Representative Studies}
+
+\textbf{Kulyabin et al.~(2024)~\cite{Kulyabin:2024}} achieved 41.9\% mIoU using a two-stage approach: BiomedBERT for NER followed by SapBERT embedding matching for entity linking. Introduced the SNOBERT benchmark for evaluating SNOMED CT entity linking. Despite sophisticated architecture, performance was limited by error propagation between stages.\\
+
+\textbf{Hristov et al.~(2023)~\cite{Hristov:2023}} used self-aligned BERT with SVC (Support Vector Classifier) trained on linked open medical ontologies. Achieved F1 scores of 0.82 for morphology codes and 0.99 for topography codes, demonstrating that BERT excels when the coding task has clear hierarchical structure and sufficient training data.\\
+
+\textbf{Gallego et al.~(2024)~\cite{Gallego:2024}} developed a two-phase Spanish medical entity linker using SapBERT bi-encoder plus cross-encoder with contrastive learning. Achieved top-25 accuracy of 87.1\% on DisTEMIST and 89.4\% on MedProcNER datasets. The two-phase approach (fast retrieval + accurate reranking) proved effective for large concept spaces.
+
+\subsubsection{Strengths and Weaknesses}
+
+\textbf{Strengths:}
+\begin{itemize}
+    \item Leverage massive pre-training on biomedical corpora
+    \item Capture contextual and semantic information
+    \item Can learn complex linguistic patterns
+    \item Transfer learning reduces need for large annotated datasets
+    \item Biomedical variants (SapBERT, BioBERT) encode medical knowledge
+\end{itemize}
+
+\textbf{Weaknesses:}
+\begin{itemize}
+    \item High computational requirements for training and inference
+    \item Two-stage pipelines suffer from error propagation
+    \item High performance variance (std dev 19.3\%) depending on implementation details
+    \item Average performance of 70.7\% trails leading deep learning approaches
+    \item Often require significant domain-specific fine-tuning
+    \item Limited interpretability compared to rule-based methods
+\end{itemize}
+
+\subsection{Deep Learning Approaches}
+
+Deep learning encompasses neural architectures beyond standard BERT, including RNNs, LSTMs, BiLSTMs, GRUs, and custom architectures designed for medical NLP.
+
+\subsubsection{Core Methodology}
+
+Deep learning approaches typically feature:
+\begin{enumerate}
+    \item Neural sequence models (BiLSTM, BiGRU) for encoding text
+    \item Pre-trained word embeddings (Word2Vec, FastText) or contextual embeddings (ELMo, BERT)
+    \item Task-specific output layers (CRF for sequence labeling, classification heads for coding)
+    \item End-to-end training on annotated data
+\end{enumerate}
+
+\subsubsection{Representative Studies}
+
+\textbf{Noori et al.~(2024)~\cite{Noori:2024}} achieved the highest reported performance at 90.7\% (F1: 0.90, Precision: 0.93, Recall: 0.89) using Bi-GRU neural networks with SciBERT embeddings, character-level CNN, and part-of-speech features on MIMIC-IV clinical text. The combination of multiple representation levels (character, word, syntactic) proved highly effective.\\
+
+\textbf{Peterson \& Liu~(2022)~\cite{Peterson:2022}} developed a deep learning pipeline combining BiLSTM with Clinical BERT and dependency parsing for transforming free-text clinical problems into SNOMED CT expressions. Achieved F1 of 0.888 for SNOMED relationships, though performance varied on real clinical text. This work addressed the harder problem of generating compositional SNOMED expressions, not just code assignment.\\
+
+\subsubsection{Strengths and Weaknesses}
+
+\textbf{Strengths:}
+\begin{itemize}
+    \item Highest average performance at 89.8\% (computed from Table~\ref{tab:snomed_conversion}: Noori et al.\ 90.7\%, Peterson \& Liu 88.8\%)
+    \item Can model complex sequential dependencies
+    \item Flexible architectures adaptable to different tasks
+    \item Can incorporate multiple information sources (characters, words, syntax, semantics)
+    \item End-to-end training optimizes for final task
+\end{itemize}
+
+\textbf{Weaknesses:}
+\begin{itemize}
+    \item Require substantial annotated training data
+    \item Computationally intensive training
+    \item Risk of overfitting to specific datasets
+    \item Black-box nature limits interpretability
+    \item Performance variability across studies suggests sensitivity to hyperparameters and data quality
+\end{itemize}
+
+\subsection{Hybrid Approaches}
+
+Hybrid methods combine multiple techniques—typically rules, dictionaries, and machine learning—to leverage complementary strengths.
+
+\subsubsection{Core Methodology}
+
+Hybrid approaches integrate:
+\begin{enumerate}
+    \item Rule-based or dictionary-based components for high-precision matching
+    \item Machine learning components for handling variations and ambiguity
+    \item Ontological reasoning using SNOMED CT hierarchy
+    \item Multi-stage pipelines with specialized components for different subtasks
+\end{enumerate}
+
+\subsubsection{Representative Studies}
+
+\textbf{Ruch et al.~(2008)~\cite{Ruch:2008}} combined vector-space retrieval with regular expression pattern matching for automatic medical encoding of MEDLINE abstracts into SNOMED categories. Achieved 82.3\% top precision and 45\% mean average precision. The hybrid approach allowed leveraging statistical methods for recall and patterns for precision.\\
+
+\textbf{Stenzhorn et al.~(2009)~\cite{Stenzhorn:2009}} combined OpenNLP (a statistical NLP toolkit) with MorphoSaurus for morphological analysis on Portuguese discharge summaries, achieving 89.3\% correctness. This hybrid combination of statistical models and linguistic processing tools demonstrates that rule-and-model integration was effective for clinical NLP before the deep learning era.\\
+
+\textbf{Lee et al.~(2010)~\cite{Lee:2010}} developed a heuristic method combining batch matching with manual encoding and lexical matching for encoding clinical database terms to SNOMED CT. Encoded approximately 84\% of terms in a palliative care dataset. This pragmatic approach emphasized practical deployment considerations.\\
+
+\textbf{Allones et al.~(2014)~\cite{Allones:2014}} used name-based matching with query expansion and structural techniques exploiting SNOMED CT relationships for Spanish pathology procedures. Achieved 88.0\% precision and 51.4\% recall, demonstrating that leveraging ontology structure improves mapping accuracy.\\
+
+\textbf{Isaradech \& Khumrin~(2019)~\cite{Isaradech:2019}} Applied approximate matching (Levenshtein Distance) with SNOMED CT dictionary lookup for mapping Thai discharge summaries to ICD-10 via SNOMED CT. Achieved 97.39\% true positive rate for top-50 candidates but high false positive rate for negative findings, highlighting the need for context awareness.
+
+\subsubsection{Strengths and Weaknesses}
+
+\textbf{Strengths:}
+\begin{itemize}
+    \item Balanced performance (74.9\% average) with moderate variance (10.4\%)
+    \item Combine precision of rules with coverage of ML
+    \item Can incorporate domain knowledge explicitly
+    \item More interpretable than pure neural approaches
+    \item Can handle rare cases through rules while using ML for common patterns
+\end{itemize}
+
+\textbf{Weaknesses:}
+\begin{itemize}
+    \item Increased system complexity
+    \item Require expertise in both rule engineering and ML
+    \item Rules may not generalize across domains or languages
+    \item Maintenance burden as medical knowledge evolves
+\end{itemize}
+
+\subsection{Ensemble Methods}
+
+Ensemble approaches combine predictions from multiple models to improve robustness and accuracy.
+
+\subsubsection{Core Methodology}
+
+Ensemble methods involve:
+\begin{enumerate}
+    \item Training multiple diverse models (different architectures, features, or training data)
+    \item Combining predictions through voting, stacking, or weighted averaging
+    \item Optionally including fuzzy matching or rule-based post-processing
+\end{enumerate}
+
+\subsubsection{Representative Studies}
+
+\textbf{Romero et al.~(2025)~\cite{Romero:2025}} achieved 82.3\% macro F1 using ensemble learning (stacking/voting) with 8 language models combined with fuzzy search entity linking for medication extraction and SNOMED CT/BNF coding. The ensemble approach improved robustness across different entity types and clinical contexts.
+
+\smallskip
+\noindent\textit{Note: this category contains a single study (n\,=\,1); the reported average is not statistically representative and should not be compared directly to categories with multiple studies.}
+
+\subsubsection{Strengths and Weaknesses}
+
+\textbf{Strengths:}
+\begin{itemize}
+    \item Can achieve state-of-the-art performance (82.3\%)
+    \item Increased robustness by combining diverse models
+    \item Reduces impact of individual model biases
+    \item Can combine models trained on different data sources
+\end{itemize}
+
+\textbf{Weaknesses:}
+\begin{itemize}
+    \item Computational cost multiplied by number of models
+    \item Increased complexity in training and deployment
+    \item Diminishing returns as ensemble size increases
+    \item Difficult to interpret ensemble decisions
+    \item Limited evidence (only 1 study in our review)
+\end{itemize}
+
+\subsection{Manual and Heuristic Approaches}
+
+Several studies document manual or semi-automated methodologies that, while not fully automatic, provide valuable insights for system design.
+
+\subsubsection{Representative Studies}
+
+\textbf{Ehrsam et al.~(2025)~\cite{Ehrsam:2025}} Developed an 8-rule manual methodology for representing clinical data elements with SNOMED CT, emphasizing context analysis, single concepts first, and approved post-coordination. Represented 97,930 data elements with 41,345 distinct SNOMED CT expressions. This work provides a gold-standard methodology for understanding how expert coders approach the task.\\
+
+\textbf{Sung et al.~(2023)~\cite{Sung:2023}} Created a 9-step manual guideline for mapping Korean EMR terms to SNOMED CT, including preprocessing, search strategies, and validation. While no quantitative metrics were reported, the methodological framework informs automated system design by documenting expert decision-making processes.\\
+
+\subsubsection{Insights for Automation}
+
+These studies, while not automated, reveal critical aspects of expert coding behavior:
+\begin{itemize}
+    \item Importance of context and clinical scenario
+    \item Systematic decomposition of complex concepts
+    \item Use of SNOMED CT's post-coordination for precision
+    \item Need for validation and consistency checking
+    \item Language-specific challenges (Korean, French) requiring tailored approaches
+\end{itemize}
+
+\subsection{Review and Meta-Analysis}
+
+\textbf{Chang \& Sung~(2024)~\cite{Chang:2024}} Conducted a scoping review of SNOMED CT use in Large Language Models. Found that 89\% of studies with comparison groups (19 out of 37 total studies) showed improvement when integrating SNOMED CT. Identified three main integration approaches: input incorporation, fusion modules, and retrieval-augmented generation. This meta-analysis confirms the value of structured medical knowledge for LLM-based clinical NLP.
+
+\section{Comparative Analysis}
+
+Table~\ref{tab:snomed_conversion} provides a comprehensive overview of the different SNOMED CT conversion methods identified in our literature review. This table serves as the foundation for our subsequent comparative analysis, documenting for each study: the primary task addressed, input and output data types, core technique employed, and reported success rates.
+
+% ============================================================
+% TABLEAU COMPLET DES APPROCHES
+% ============================================================
+
+% Reduce tabcolsep to prevent overflow: 6 columns × 2×\tabcolsep + 7 rules ≈ 74pt overhead with default 6pt.
+% With \tabcolsep=3pt overhead drops to ~39pt; proportions below sum to 0.93 so total ≤ \linewidth.
+\setlength{\LTleft}{\fill}
+\setlength{\LTright}{\fill}
+\setlength{\tabcolsep}{1.5pt}
+\scriptsize
+\begin{longtable}{|L{0.11\linewidth}|L{0.11\linewidth}|L{0.12\linewidth}|L{0.12\linewidth}|L{0.16\linewidth}|L{0.16\linewidth}|}
+\caption{Overview of SNOMED CT conversion methods}\label{tab:snomed_conversion}\\
+\hline
+\textbf{Paper} & \textbf{Task} & \textbf{Input} & \textbf{Output} & \textbf{Technique} & \textbf{Success Rate} \\
+\hline
+\endfirsthead
+
+\multicolumn{6}{c}{\textit{\tablename~\thetable{} continued from previous page}} \\[2pt]
+\hline
+\textbf{Paper} & \textbf{Task} & \textbf{Input} & \textbf{Output} & \textbf{Technique} & \textbf{Success Rate} \\
+\hline
+\endhead
+
+\hline
+\multicolumn{6}{r}{\textit{Continued on next page}} \\
+\endfoot
+
+\hline
+\endlastfoot
+Kate (2020) \cite{Kate:2020} & Text to SNOMED CT & Clinical terms (plain text) & SNOMED CT 2018 post-coordinated concepts & Probability-based ML with noisy-OR combination & 32.2\% full conversion\footnotemark[1], 62.5\% partial conversion\footnotemark[2] \\
+\hline
+Kulyabin et al.~(2024) \cite{Kulyabin:2024} & Notes to SNOMED CT & Clinical notes (plain text) & SNOMED CT concept links & Two-stage BERT (BiomedBERT + SapBERT) with NER + embedding matching & 0.4194 mIoU\footnotemark[3] \\
+\hline
+Rajput et al.~(2023) \cite{Rajput:2023} & Local codes to SNOMED CT & Local clinical identifiers (plain text) & SNOMED CT hierarchical mappings & Semi-automated KNIME workflow with Snowstorm API and ECL queries & 429 SNOMED CT terms retrieved from 30 microorganisms \\
+\hline
+Fung et al.~(2016) \cite{Fung:2016} & SNOMED CT to ICD-10 & SNOMED CT surgical procedures & ICD-10-PCS procedure codes & Lexical matching (MetaMap) + ontological alignment of attributes & 45\% correct (lexical), 40\% correct (ontological), 93\% when both agree \\
+\hline
+Davidson et al.~(2025) \cite{Davidson:2025} & Notes to SNOMED CT & Clinical discharge notes (plain text) & SNOMED CT concept links & Dictionary-based approach with external resource expansion and section partitioning & 0.4202 mIoU\footnotemark[3] (1st place in challenge) \\
+\hline
+Hristov et al.~(2023) \cite{Hristov:2023} & Text to SNOMED CT & Clinical terms (plain text) & SNOMED CT morphology/ topography codes & Self-aligned BERT + SVC with linked open data training & F1: 0.82 (morphology), 0.99 (topography) \\
+\hline
+Ruch et al.~(2008) \cite{Ruch:2008} & Abstracts to SNOMED CT & MEDLINE abstracts (plain text) & SNOMED CT categories & Hybrid system: vector-space retrieval + regular expression pattern matching & 82.3\% top precision, 45\% mean average precision \\
+\hline
+Lee et al.~(2010) \cite{Lee:2010} & Database to SNOMED CT & Clinical database terms (data elements, coded values, free text) & SNOMED CT concepts & Heuristic method: batch matching + manual encoding with lexical matching & ~84\% terms encoded (palliative care dataset) \\
+\hline
+Peterson \& Liu~(2022) \cite{Peterson:2022} & Text to SNOMED CT & Clinical problem descriptions (plain text) & SNOMED CT expressions & Deep learning pipeline: BiLSTM + Clinical BERT with dependency parsing & F1: 0.888 (SNOMED relationships), varied performance on real clinical text \\
+\hline
+Ehrsam et al.~(2025) \cite{Ehrsam:2025} & Data elements to SNOMED CT & Data warehouse clinical data elements & SNOMED CT codes & 8-rule manual methodology: context analysis, single concepts first, approved post-coordination & Methodological framework (97,930 data elements represented with 41,345 distinct SNOMED CT expressions) \\ \hline
+
+Isaradech \& Khumrin~(2019) \cite{Isaradech:2019} & Notes to ICD-10 (via SNOMED CT) & Thai discharge summaries (plain text) & ICD-10 codes via SNOMED CT bridge & Approximate matching (Levenshtein Distance) + SNOMED CT dictionary lookup & 97.39\% true positive rate (rank >50\%), but high false positive rate for negative findings \\
+\hline
+
+Chang \& Sung~(2024) \cite{Chang:2024} & Review: SNOMED CT in LLMs & N/A (review paper) & N/A & Review of integration methods: input incorporation, fusion modules, retrieval-augmented & 89\% improvement among 19 studies with comparisons\newline (51\% of total 37 studies reported comparisons) \\
+\hline
+
+Gallego et al.~(2024) \cite{Gallego:2024} & Text to SNOMED CT & Spanish clinical text (DisTEMIST, MedProcNER) & SNOMED CT codes & Two-phase: SapBERT bi-encoder + cross-encoder with contrastive learning & Top-25 accuracy: 0.871 (DisTEMIST), 0.894 (MedProcNER) \\ \hline
+
+Cantón Simó (2024) \cite{Canton:2024} & Notes to SNOMED CT & MIMIC-IV discharge summaries (plain text) & SNOMED CT concept annotations & Comparison of dictionary-based (Kiri) vs. BERT-based NER with candidate matching and re-ranking & mIoU: 0.432 (dictionary-based), 0.427 (BERT-based) \\
+\hline
+
+Sung et al.~(2023) \cite{Sung:2023} & EMR terms to SNOMED CT & Korean clinical terms from EMRs & SNOMED CT concepts & 9-step manual methodology: preprocessing, search strategies, validation & Methodological guideline (no quantitative metrics reported) \\
+\hline
+
+Noori et al.~(2024) \cite{Noori:2024} & Notes to SNOMED CT & Clinical text (MIMIC-IV) & SNOMED CT concept annotations & Bi-GRU with SciBERT embeddings, character-level CNN, POS features & F1: 0.90, Precision: 0.93, Recall: 0.89 \\
+\hline
+Romero et al.~(2025) \cite{Romero:2025} & Notes to SNOMED CT + BNF & Clinical letters (n2c2--2018) & SNOMED CT + BNF codes & Ensemble learning (stack/voting) with 8 LMs + fuzzy search linking & Macro F1: 0.8232 (voting), 0.8156 (stacked); entity linking via fuzzy search \\
+\hline
+Allones et al.~(2014) \cite{Allones:2014} & Glossary to SNOMED CT & Spanish pathology procedure terms (plain text) & SNOMED CT procedure concepts & Name-based matching + query expansion + structural techniques (exploiting SNOMED-CT relationships) & 88.0\% precision, 51.4\% recall (automated mapping task) \\
+\hline
+Stenzhorn et al.~(2009) \cite{Stenzhorn:2009} & Notes to SNOMED CT & Portuguese discharge summaries (plain text) & SNOMED CT concepts & Hybrid: OpenNLP + MorphoSaurus with morphological analysis and co-occurrence relations & 89.3\% correctness (MID window size=5) \\
+\hline
+Martinez Soriano \& Castro~(2017) \cite{Martinez:2017} & Notes to SNOMED CT & Spanish emergency clinical reports (plain text) & SNOMED CT concepts & Neural network (word2vec/ doc2vec Skip-gram) + distance-based recognition (DNER function) & Preliminary results on 318,585 reports (no quantitative metrics reported) \\
+\hline
+Metke-Jimenez \& Karimi~(2015) \cite{MetkeJimenez:2015} & Forum posts to SNOMED CT & Medical forum posts (AskaPatient) & SNOMED CT + AMT concepts & Comparison: MetaMap, dictionary-based (Lucene), CRF+ Ontoserver & CRF+ Ontoserver best: 0.771 precision, 0.376 recall\newline (ADRs); 0.988 precision, 0.773 recall (drugs) \\
+\hline
+
+\end{longtable}
+\normalsize
+\normalsize
+\setlength{\tabcolsep}{6pt}  % restore default after longtable
+\footnotetext[1]{Full conversion: perfect identification of all relations and concepts with zero errors allowed.}
+\footnotetext[2]{Partial conversion: allows at most one mistake (missing, extra, or incorrect relation/concept).}
+\footnotetext[3]{mIoU (macro-averaged Intersection over Union) measures how well predicted text spans match the gold standard. For two spans, $\text{IoU} = |\text{overlap}| / |\text{union}|$; this is averaged across all annotations in the test set.}
+
+% ============================================================
+% FIN DU TABLEAU
+% ============================================================
+
+\subsection{Performance Comparison Across Techniques}
+
+To better visualize and compare the results presented in Table~\ref{tab:snomed_conversion}, we conducted a graphical analysis of performance across two dimensions: by individual study (Figure~\ref{fig:perf_study}) and by technique type (Figure~\ref{fig:perf_technique}).
+
+\textbf{Important note:} The studies presented in this comparative analysis use heterogeneous evaluation metrics (precision, recall, F1-score, mIoU, conversion rates, etc.) and address tasks of varying complexity. The performance values displayed in the figures represent the most representative or realistic metric from each study. For precise interpretation of results, refer to Table~\ref{tab:snomed_conversion} which details the specific metrics used by each study. Direct comparisons should be made with caution.
+
+\subsubsection{Performance by Study}
+
+Figure~\ref{fig:perf_study} illustrates the individual performance of each analyzed study, ranked in descending order of performance. We observe significant variability in results, with performance ranging from approximately 41.9\% (Kulyabin et al., 2024) to 90.7\% (Noori et al., 2024). This variability can be explained by several factors:
+
+\begin{itemize}
+    \item Diversity of metrics used (precision, recall, F1-score, mIoU)
+    \item Differences in task complexity (simple mapping vs. post-coordination)
+    \item Target language (English, Spanish, Portuguese, Korean, Thai, etc.)
+    \item Type of clinical data processed (notes, reports, forums, discharge summaries, etc.)
+    \item Quality and size of training and evaluation datasets
+\end{itemize}
+
+Leading approaches include Noori et al.~(2024) achieving 90.7\% using Bi-GRU neural networks with SciBERT embeddings, Stenzhorn et al.~(2009) reaching 89.3\% with hybrid morphological analysis, and Chang \& Sung~(2024) demonstrating 89\% improvement through large language model integration. Conversely, several dictionary-based and BERT-only approaches struggle to exceed 50\% performance, highlighting the limitations of single-paradigm solutions for the full complexity of clinical entity linking, at least as evaluated on the heterogeneous benchmarks represented here.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{snomed_comparison_by_study.pdf} % TODO: Regenerate this figure with English labels.
+    \caption{Performance of SNOMED CT conversion methods by study. Bars are colored by technique type. Performance represents the most representative or realistic metric reported in each study (see Table~\ref{tab:snomed_conversion} for details). The highest-performing approaches (>85\%) predominantly use BERT, Deep Learning, or Hybrid techniques.}
+    \label{fig:perf_study}
+\end{figure}
+
+\subsubsection{Performance by Technique Type}
+
+Figure~\ref{fig:perf_technique} presents aggregated analysis by technique type, enabling identification of the most promising approaches for SNOMED CT conversion. The results reveal several important patterns:
+
+\begin{itemize}
+    \item \textbf{Deep Learning} techniques (n=2; \textbf{89.8\% average}, std dev 1.3\%) and \textbf{Ensemble} methods (82.3\%, n=1) achieve the highest performance, leveraging their ability to capture semantic context and generalize from training data. However, the variance in BERT approaches is notable (std dev 19.3\%), reflecting differences in architectures and datasets used.
+
+    \item \textbf{Hybrid} approaches (n=5; \textbf{74.9\% average}, std dev 10.4\%) offer a favorable balance between performance and interpretability, combining expert rules with machine learning. Their moderate standard deviation suggests relative stability of these methods.
+
+    \item \textbf{Heuristic} (67.0\%, n=2) and \textbf{Manual} (75.0\%, n=2) methods achieve satisfactory results for approaches with lower computational requirements.
+
+    \item \textbf{Dictionary-based} approaches (50.1\%, n=4) obtain the most variable performance (std dev 13.0\%), explained by their strong dependence on dictionary quality and coverage.
+\end{itemize}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\textwidth]{snomed_comparison_by_technique.pdf} % TODO: Regenerate this figure with English labels.
+    \caption{Average performance by technique type with standard deviation. The number of studies (n) is indicated on each bar. Error bars represent standard deviation, illustrating performance variability within each category based on specific implementations, datasets, and evaluation metrics.}
+    \label{fig:perf_technique}
+\end{figure}
+
+\subsection{Task Complexity and Evaluation Metrics}
+
+A critical observation is the heterogeneity of tasks and metrics across studies, complicating direct comparison:
+
+\textbf{Task variations:}
+\begin{itemize}
+    \item \textbf{Entity recognition only:} Identifying clinical mentions without linking to codes
+    \item \textbf{Entity linking only:} Mapping pre-identified mentions to SNOMED codes
+    \item \textbf{End-to-end:} Both recognition and linking in a single pipeline
+    \item \textbf{Simple coding:} Assigning single SNOMED codes
+    \item \textbf{Post-coordination:} Generating compositional SNOMED expressions
+\end{itemize}
+
+\textbf{Metric variations:}
+\begin{itemize}
+    \item Precision, recall, F1-score (most common)
+    \item mIoU (mean Intersection over Union) for span-based evaluation
+    \item Top-k accuracy for ranking-based approaches
+    \item Conversion rates (full vs. partial) for compositional expressions
+    \item Task-specific metrics (e.g., relationship accuracy for SNOMED expressions)
+\end{itemize}
+
+These variations mean that a 90\% score in one study may not be directly comparable to 90\% in another. Kate (2020)'s 32.2\% full conversion rate, which permits zero errors in compositional post-coordination, may represent a more demanding achievement than the 80\% simple code assignment accuracy reported in several other studies, given the substantially greater task complexity.
+
+\subsection{Language and Domain Considerations}
+
+\textbf{Language coverage:} The overwhelming majority of studies focus on English (16 out of 21), with limited work on other languages: Spanish (2), Portuguese (1), Korean (1), Thai (1). \textbf{No studies in our review addressed French medical text}, despite French being a major European medical language. This represents a significant gap for deployment in francophone healthcare settings.
+
+\textbf{Domain specificity:} Most studies evaluate on general clinical corpora (discharge summaries, clinical notes) or broad document collections (MEDLINE abstracts). Few address specialty-specific challenges such as \textbf{ophthalmological terminology}, radiology reports, or pathology notes. Domain adaptation remains largely unexplored.
+
+\textbf{Cross-lingual transfer:} The limited multilingual work suggests that approaches optimized for English do not trivially transfer to other languages. Morphological complexity (Spanish, Portuguese), character systems (Thai), and linguistic structure differences require targeted adaptation strategies.
+
+\subsection{Practical Deployment Considerations}
+
+Beyond raw performance metrics, several practical factors influence real-world applicability:
+
+\textbf{Computational efficiency:}
+\begin{itemize}
+    \item Dictionary methods offer fast inference but require preprocessing
+    \item BERT-based approaches are computationally intensive
+    \item Ensemble methods multiply computational costs
+    \item Edge deployment may favor lighter models
+\end{itemize}
+
+\textbf{Training data requirements:}
+\begin{itemize}
+    \item Deep learning requires substantial annotated data (often thousands of examples)
+    \item Dictionary methods require no training data but extensive curation
+    \item Hybrid approaches can work with moderate data through rule augmentation
+\end{itemize}
+
+\textbf{Interpretability and trust:}
+\begin{itemize}
+    \item Rule-based components provide clear decision rationale
+    \item Neural models offer limited interpretability
+    \item Clinical deployment may require explainable predictions for physician trust and regulatory compliance
+\end{itemize}
+
+\textbf{Maintenance and updates:}
+\begin{itemize}
+    \item SNOMED CT is regularly updated with new concepts
+    \item Systems must be maintainable as medical knowledge evolves
+    \item Balance between automated learning and expert oversight
+\end{itemize}
+
+\subsection{Discussion and Recommendations}
+
+The comparative analysis reveals several important trends for developing SNOMED CT conversion systems:
+
+\paragraph{Technique Selection According to Context}
+\begin{itemize}
+    \item For \textbf{production applications} requiring high precision and recall: favor Deep Learning or BERT approaches (>80\% average performance) with models pre-trained on biomedical corpora
+    \item For \textbf{rapid prototyping} or limited resources: Hybrid methods offer good balance (74.9\% with lower computational costs and better interpretability)
+    \item For \textbf{specific use cases} with controlled terminology: Dictionary approaches may suffice if well-configured, but beware of high variance
+\end{itemize}
+
+\paragraph{Key Success Factors}
+The highest-performing studies (>85\%) share several common characteristics:
+\begin{enumerate}
+    \item Use of models pre-trained on biomedical corpora (BiomedBERT, SapBERT, Clinical BERT)
+    \item Integration of SNOMED CT's hierarchical structure into the learning process
+    \item Post-processing techniques to improve mapping consistency
+    \item Explicit handling of ambiguities, negation, and clinical context
+    \item Use of ensemble approaches combining multiple models
+\end{enumerate}
+
+\paragraph{Limitations and Perspectives}
+Despite recent progress, several challenges persist:
+\begin{itemize}
+    \item Automatic \textbf{post-coordination} remains difficult (62.5\% for partial conversion in Kate, 2020)
+    \item Performance varies significantly by \textbf{language} (majority of studies in English, few in Spanish, Portuguese, Korean, and Thai)
+    \item Lack of \textbf{standardized annotated datasets} limits direct comparability between approaches
+    \item \textbf{Heterogeneous evaluation metrics} (mIoU, F1-score, precision/recall, conversion rates) complicate interpretation and comparison
+    \item The specific task varies considerably between studies: some focus on entity extraction, others on terminological mapping, others on post-coordination
+\end{itemize}
+
+\section{Synthesis and Research Gaps}
+
+\subsection{Key Findings}
+
+Our comprehensive literature review reveals several important findings:
+
+\begin{enumerate}
+    \item \textbf{Limited deployment evidence:} Most studies report experimental results on academic datasets. Few discuss real-world deployment, integration with EHR systems, or long-term evaluation with clinical users. This gap is the primary motivation for the Saint-Luc clinical evaluation in this thesis.
+
+    \item \textbf{Performance ceiling:} Current state-of-the-art approaches achieve approximately 90\% performance on well-defined English datasets. This suggests room for improvement but also approaching practical utility thresholds.
+
+    \item \textbf{No single dominant approach:} Different techniques excel in different contexts. Deep learning achieves highest peak performance but requires substantial data. Hybrid methods offer stable performance with better interpretability. Dictionary methods remain useful for high-precision, low-coverage applications.
+
+    \item \textbf{Evaluation inconsistency:} The field lacks standardized benchmarks, evaluation protocols, and metrics. This hampers progress by making it difficult to identify genuine advances versus dataset-specific optimization.
+
+    \item \textbf{English dominance:} The overwhelming focus on English limits generalizability. Non-English medical NLP, particularly for morphologically rich languages like French, remains underexplored.
+
+    \item \textbf{Task definition ambiguity:} Studies conflate different tasks (NER, entity linking, end-to-end coding, post-coordination), making comparison difficult and obscuring which sub-problems are solved versus open.
+\end{enumerate}
+
+\subsection{Identified Gaps}
+
+Based on this analysis, we identify the following research gaps that motivate our work:
+
+\textbf{Gap 1: French medical text processing}
+No identified studies address SNOMED CT coding for French medical documents. Given linguistic differences (morphology, syntax, medical terminology conventions), approaches optimized for English cannot be assumed to transfer directly. French biomedical NLP resources (pre-trained models, annotated corpora) are less developed than English counterparts.
+
+\textbf{Gap 2: Ophthalmological specialty}
+Ophthalmology presents unique challenges: highly specialized anatomy vocabulary, complex spatial relationships, fine-grained diagnostic distinctions, and extensive use of measurements and imaging. General medical NLP systems may not capture these nuances.
+
+\textbf{Gap 3: Comparative evaluation on identical data}
+Most studies evaluate on different datasets with different metrics, preventing direct comparison. A rigorous comparison of multiple approaches on the same French ophthalmological corpus would provide clearer guidance for practitioners.
+
+\textbf{Gap 4: Practical deployment considerations}
+Limited attention to computational efficiency, interpretability, error analysis, and integration with existing workflows. These factors are critical for clinical adoption but often overlooked in academic studies.
+
+\textbf{Gap 5: Post-coordination for complex concepts}
+Few studies address generation of compositional SNOMED expressions (post-coordination), instead focusing on simple code assignment. Clinical reality often requires complex expressions to capture diagnostic precision.
+
+\subsection{Positioning of Current Work}
+
+This thesis addresses these gaps through the following contributions:
+
+\begin{enumerate}
+    \item \textbf{French medical NLP:} First systematic study of SNOMED CT coding for French medical text, with focus on ophthalmological reports from a real clinical setting.
+
+    \item \textbf{Comparative evaluation:} Rigorous comparison of multiple leading approaches (Deep Learning, BERT-based, Hybrid) on identical French ophthalmological data using consistent evaluation metrics.
+
+    \item \textbf{Adaptation strategies:} Documentation of necessary modifications to transfer English-optimized methods to French medical language, including use of French biomedical pre-trained models and language-specific preprocessing.
+
+    \item \textbf{Practical focus:} Emphasis on deployment considerations including computational efficiency, error analysis, interpretability, and clinical workflow integration.
+
+    \item \textbf{Real-world validation:} Evaluation on actual clinical documents from Cliniques universitaires Saint-Luc rather than synthetic or publicly available datasets that may not reflect real clinical practice.
+\end{enumerate}
+
+The next chapter details the methodology adopted to address these gaps and test our working hypotheses.

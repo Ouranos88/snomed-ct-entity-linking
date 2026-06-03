@@ -1,0 +1,120 @@
+% ============================================================
+% CHAPTER 6: CONCLUSION AND FUTURE WORK
+% ============================================================
+
+Chapter~5 presented the quantitative and qualitative results of the four methods developed in this thesis, assessed four working hypotheses against the experimental evidence, and identified the principal threats to validity. This chapter synthesises those findings into a coherent answer to the central research question, distils the contributions of the work, proposes concrete deployment recommendations for the Cliniques universitaires Saint-Luc, and outlines directions for future research.
+
+\section{Summary of Contributions}
+
+This thesis makes four substantive contributions to the problem of automatic SNOMED CT coding in French clinical text.
+
+\textbf{A systematic, multi-paradigm comparison under identical conditions.} Four methods spanning the full spectrum of computational paradigms were implemented, evaluated on the same dataset, and compared using the same two-tier evaluation framework: pure dictionary matching (Method~1), biomedical bi-encoder retrieval (Method~2), generative LLM with retrieval-augmented grounding (Method~3), and a hybrid combining LLM span detection with tiered dictionary lookup (Method~4). Such head-to-head comparisons across paradigms are rare in the clinical NLP literature, where most studies evaluate a single method against existing baselines from prior work.
+
+\textbf{Characterisation of the annotation density paradox.} This thesis provides a rigorous quantitative account of why mIoU systematically underestimates the clinical utility of LLM-based selective extraction methods on exhaustively annotated benchmarks. The gap between Method~4's mIoU~(0.0398) and its Hits@5~(0.7298) constitutes direct empirical evidence of this paradox, which has practical implications for the interpretation of any entity linking benchmark that adopts an exhaustive annotation philosophy.
+
+\textbf{The M4* variant and the prompt scope finding.} The development and evaluation of M4* (a targeted modification of the entity extraction prompt in Method~4 to explicitly include systemic comorbidities) demonstrates that a single sentence added to the NER prompt yields a 12.5 percentage point improvement in clinical recall (from 43.8\% to 56.3\%) on the French qualitative evaluation, surpassing both GPT-3.5 and Claude~Sonnet~4.6, which had access to the same prompt but no retrieval index. This finding is methodologically important: it shows that the span detection component, rather than the concept linking component, is the binding constraint for French clinical deployment, and that this constraint can be partially relaxed without any change to the model weights or retrieval index.
+
+\textbf{A deployed annotation and review tool.} Beyond the benchmark evaluation, this thesis produced two working clinical tools, \texttt{annotate\_pdf.py} and a Streamlit-based review interface, that accept raw French ophthalmological PDF documents, apply SNOMED CT entity linking, and return a reviewed, exportable annotation list. These tools constitute a functional prototype for deployment at Saint-Luc and represent the practical deliverable of the thesis work.
+
+\section{Key Findings}
+
+\subsection{English Benchmark (Quantitative)}
+
+On the SNOMED CT Entity Linking Challenge~1.2.1 benchmark (72 test notes, approximately 20\,000 gold annotations from MIMIC-IV discharge summaries), the four methods produce the following results:
+
+\begin{itemize}
+    \item \textbf{Method~1} achieves the highest mIoU~(0.3601), competitive with the challenge state of the art~(0.420 for the KIRI system~\cite{Davidson:2025}), and the highest Hits@5~(0.7671). Its primary bottleneck is span recall~(0.4893): approximately 51\% of gold annotations receive no overlapping prediction, almost entirely due to out-of-vocabulary entities and the 8-token sliding window ceiling.
+
+    \item \textbf{Method~2} achieves a substantially lower mIoU~(0.1024) and MRR~(0.2598) than Method~1. The structural reason is that MIMIC-IV annotations are largely derived from official SNOMED RF2 synonyms, for which exact string matching is nearly optimal; SapBERT's semantic similarity introduces noise rather than benefit in this setting.
+
+    \item \textbf{Methods~3 and~4} achieve low mIoU~(0.0162 and 0.0398 respectively) as a consequence of the annotation density paradox: extracting 30--40 clinically relevant entities from a note that contains 340 gold annotations guarantees that the vast majority of annotations are unmatched, regardless of concept linking quality. Method~4's Hits@5~(0.7298) and MRR~(0.6796) (the highest MRR across all four methods) confirm that the concept linking component, when given a span, is highly accurate.
+\end{itemize}
+
+The central quantitative finding is that \textbf{dictionary matching remains the best-performing paradigm for exhaustively annotated English benchmarks of this type}, not because it is inherently superior but because it is architecturally aligned with the annotation philosophy: it generates a dense prediction for every matched span, which is what the mIoU metric rewards.
+
+\subsection{French Clinical Setting (Qualitative)}
+
+On six anonymised French ophthalmological PDFs from Cliniques universitaires Saint-Luc (16 evaluable diagnoses), the rankings reverse:
+
+\begin{itemize}
+    \item \textbf{M4*} (Method~4 with expanded comorbidity prompt) achieves 56.3\% (9/16), the best result across all systems including general-purpose LLM baselines.
+    \item \textbf{GPT-3.5 and Claude~Sonnet~4.6} each achieve 50.0\% (8/16), confirming that a well-calibrated open-source local pipeline can match frontier proprietary models on this task.
+    \item \textbf{Methods~3 and~4} (original prompt) achieve 43.8\% (7/16), outperforming Method~1~(37.5\%) and Method~2~(31.3\%).
+    \item \textbf{Method~1's dictionary approach underperforms in French}: the Belgian Alpha RF2 French synonym extension provides partial coverage but cannot handle the colloquial abbreviations, French clinical syntax, and implicit diagnostic reasoning present in ophthalmological consultation notes.
+\end{itemize}
+
+The central qualitative finding is that \textbf{method rankings reverse between the English benchmark and the French clinical setting}. This reversal is further supported by Phase~2b (Section~5.3): on 36 structured French clinical cases from medical textbooks (270 gold annotations), Method~4 achieves the highest top-5 hit rate overall~(42\%), outperforming Methods~1~(30\%), M3~(29\%), and M2~(20\%), with the gap most pronounced in the cardiology section~(42\% vs.\ 27\% for M3). This reversal is not accidental: it reflects the fundamental mismatch between what mIoU rewards (dense coverage) and what French clinical deployment requires (accurate extraction of a small set of diagnostically relevant entities). The annotation density paradox, which made LLM methods appear to underperform on the benchmark, is actually a sign of alignment with clinical deployment requirements rather than a deficiency.
+
+\subsection{The Annotation Density Paradox as a Methodological Finding}
+
+The most general contribution of this thesis may be the explicit identification and quantification of the annotation density paradox as a source of systematic bias in clinical entity linking benchmarks. When a benchmark labels every medical term (annotation density $\approx$340/note) and a method is designed to extract clinically significant entities selectively ($\approx$30--40/note), the mIoU metric will penalise the selective method regardless of its concept linking quality. This has practical consequences for benchmark design: a benchmark intended to evaluate clinical decision support tools, rather than automated annotation pipelines, should adopt a clinical relevance annotation criterion, labelling only those entities that a clinician would consider actionable. Future benchmarks in clinical entity linking would benefit from specifying their annotation philosophy explicitly and selecting evaluation metrics accordingly.
+
+\section{Hypothesis Assessment Summary}
+
+Table~\ref{tab:hypothesis_summary} summarises the assessment of the four working hypotheses formulated in Chapter~1 against the experimental evidence of Chapter~5.
+
+\begin{table}[htbp]
+\centering
+\scriptsize
+\caption{Assessment of the four working hypotheses against experimental evidence.}
+\label{tab:hypothesis_summary}
+\begin{threeparttable}
+\begin{tabular}{L{0.7cm}L{4.6cm}L{1.8cm}L{4.2cm}}
+\toprule
+\textbf{ID} & \textbf{Hypothesis} & \textbf{Status} & \textbf{Key evidence} \\
+\midrule
+H1 & Neural/BERT approaches outperform dictionary-based methods &
+    Refuted (English); Open (French) &
+    M2 mIoU~0.1024 vs.\ M1 mIoU~0.3601; French sample too small for definitive conclusion \\
+\addlinespace
+H2 & Hybrid approaches offer the best balance of performance and interpretability &
+    Partially confirmed &
+    M4 achieves highest MRR~(0.6796) and Hits@5~(0.7298); best hybrid is pipeline-level, not module-level \\
+\addlinespace
+H3 & Prompt scope significantly affects comorbidity recall &
+    Confirmed &
+    M4* outperforms M4 by 12.5\,pp on French PDFs (43.8\% $\to$ 56.3\%) with a single prompt modification \\
+\addlinespace
+H4 & Real-world French deployment is harder than the English benchmark suggests &
+    Confirmed &
+    Method rankings reverse across both French evaluations (6 PDFs + 36 structured cases); French synonym extension alone is insufficient \\
+\bottomrule
+\end{tabular}
+\end{threeparttable}
+\end{table}
+
+\section{Limitations}
+
+The following limitations circumscribe the conclusions that can be drawn from this thesis.
+
+\textbf{Single English benchmark.} The quantitative evaluation rests on a single dataset (MIMIC-IV discharge summaries). MIMIC-IV is a valuable and widely used resource, but its note type (discharge summary), register (formal, structured), and annotation philosophy (exhaustive) differ substantially from the target domain (French ophthalmological consultation notes). The reversal of method rankings between the two evaluation contexts confirms that performance on MIMIC-IV does not generalise directly to Saint-Luc.
+
+\textbf{Small French qualitative sample.} The qualitative evaluation on six French PDFs (16 evaluable diagnoses) cannot support statistical inference. Each percentage point reported in Table~\ref{tab:french_qualitative} corresponds to 0.16 diagnoses; a difference of two diagnoses separates first and last place. The ranking reversal is directionally convincing, but the precise magnitude of the performance differences is subject to high uncertainty. The variance note applies with particular force to the LLM-based methods, for which a single different entity extraction decision shifts the reported score by 6.25 percentage points.
+
+\textbf{Outdated French SNOMED resources.} The Belgian Alpha RF2 package used to augment Method~1's Tier~2 dictionary and to provide French labels in the annotation tool dates from September~2020, over five years before the English RF2 release used for the benchmark~(March~2026). Terms added to the French package since 2020 are absent from the dictionary, creating an asymmetry that may disadvantage Method~1 on more recently introduced French SNOMED synonyms.
+
+\textbf{LLM non-determinism and reproducibility.} Methods~3 and~4 use \texttt{llama3.1:8b} at temperature~0 to maximise reproducibility, but a single evaluation run was conducted. LLM outputs can vary across hardware configurations and library versions even at greedy decoding. The results should be interpreted as point estimates rather than statistically stable averages.
+
+\textbf{Single evaluation run for LLM-based methods.} The LLM reranking component of Method~4 was enabled for the benchmark evaluation reported in Chapter~5. However, a single evaluation run was conducted; LLM outputs can vary across hardware configurations and library versions even at greedy decoding (temperature~0). The reported MRR~(0.6796) and Hits@5~(0.7298) for Method~4 should be interpreted as point estimates. Averaging results across multiple runs would provide more statistically stable estimates of the reranking contribution.
+
+\textbf{Limited French ground truth corpora.} Two French evaluation corpora were used in this thesis. The qualitative evaluation on six Saint-Luc PDFs relies on the Epic EHR problem list, a sparse clinical summary that limits evaluation to a coarse hit/miss judgment. The Phase~2b structured corpus (36 textbook cases, 270 annotations) provides more annotations but uses textbook cases rather than real consultation documents, and lacks character-level span offsets. A formally annotated corpus of real French ophthalmological notes, with character-level offsets, multiple annotators, and inter-annotator agreement measurement, would enable the same rigorous mIoU evaluation that is available for the English benchmark.
+
+\section{Future Work}
+
+Several research directions emerge from the findings of this thesis that extend beyond the scope of a single master's project.
+
+\textbf{Benchmark annotation philosophy.} The annotation density paradox documented in this thesis raises a broader question for the NLP community: how should clinical entity linking benchmarks be designed to measure properties that matter for clinical decision support? A benchmark explicitly designed around a clinical utility criterion, annotating only entities that inform diagnosis, treatment, or billing, would provide a complementary evaluation surface to the exhaustive annotation benchmarks that currently dominate the literature. Developing and releasing such a benchmark for French clinical text would be a high-impact contribution.
+
+\textbf{Post-coordination.} SNOMED CT's expressive power derives partly from post-coordination: the ability to combine multiple concepts into a single compound expression representing a complex clinical idea. None of the four methods implemented in this thesis handle post-coordinated expressions. Clinical notes frequently require post-coordination to represent findings accurately (\eg\ ``retinal detachment of the right eye, macula-off, with proliferative vitreoretinopathy''). A method capable of generating post-coordinated SNOMED expressions would substantially expand the coding coverage achievable by automated systems.
+
+\textbf{Active learning for annotation acceleration.} Annotating a French ophthalmological corpus from scratch is labour-intensive. An active learning workflow, in which M4* generates candidate annotations that annotators confirm or reject rather than annotating from scratch, would substantially reduce annotation effort while producing the same ground truth. The Streamlit interface developed in this thesis is already structured as a review tool and could serve as the foundation for such a workflow with modest engineering effort.
+
+\textbf{Real-time voice-assisted clinical coding.} The voice prototype described in Section~4.6.3 demonstrates the target interaction model: a clinician dictates a consultation note and SNOMED codes appear inline as speech is recognised. Realising this model in practice requires two advances beyond the current prototype. On the speech recognition side, a medical-domain ASR model such as \textit{Whisper large-v3}~\cite{Radford:2023}, which provides substantially better coverage of rare French medical vocabulary than the general-purpose Web Speech API, would reduce the transcription error rate to a level where downstream entity detection becomes reliable. On the inference side, the 3--10 second LLM NER latency of Method~4 must be reduced to under one second per phrase; plausible routes include smaller instruction-tuned models, speculative decoding, or replacing the LLM NER step with a fine-tuned sequence labelling model. When both bottlenecks are resolved, voice-driven SNOMED coding during consultation would eliminate the post-hoc annotation step entirely.
+
+\textbf{Evaluation of larger and instruction-tuned local LLMs.} All experiments in this thesis use \texttt{llama3.1:8b} as the local LLM, constrained by the 8~GB VRAM limit of the available GPU. The recent proliferation of instruction-tuned models at the 13B and 70B parameter scale, many of which are available in quantised formats that fit within modest GPU budgets, represents an opportunity to assess whether the prompt scope findings of H3 hold across model sizes, and whether larger models close the gap with frontier proprietary models on French clinical text.
+
+\section{Closing Remark}
+
+This thesis set out to answer a practical question posed by clinicians at the Cliniques universitaires Saint-Luc: which computational approach is best suited for automatic SNOMED CT coding of French ophthalmological consultation notes? The answer, as experimental evidence confirms, is context-dependent. On the English benchmark that dominates the current literature, dictionary matching performs best, not because it is semantically superior but because it is architecturally aligned with the evaluation protocol. In the French clinical setting that actually matters for deployment, LLM-based hybrid methods with carefully scoped prompts outperform both dictionary approaches and frontier general-purpose language models.
+
+The gap between these two conclusions is not a contradiction but a finding: it demonstrates that evaluation context determines which method appears best, and that benchmark performance alone is an insufficient basis for deployment decisions in clinical NLP. Closing this gap, by building a rigorous French annotated corpus and re-evaluating all methods under clinically meaningful criteria, is the most important next step for translating the findings of this thesis into production use.

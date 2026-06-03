@@ -1,0 +1,27 @@
+Décompensation endothéliale sur dystrophie de Fuchs | 193839007 | Fuchs endothelial corneal dystrophy (disorder)
+Pseudophakie | 44219007 | Pseudophakia (finding)
+Neuropathie optique bilatérale | 76976005 | Optic neuropathy (disorder)
+
+Paralysie oculomotrice du nerf VI bilatérale | 302033007 | Abducens nerve palsy (disorder)
+Épiphora | 193982009 | Epiphora (finding)
+Cataracte sénile nucléaire (œil droit) | 53889007 | Nuclear senile cataract (disorder)
+Hypertension artérielle | 38341003 | Hypertensive disorder, systemic arterial (disorder)
+Hypertension oculaire bilatérale | 421725003 | Ocular hypertension (disorder)
+Glaucome à pression normale (suspecté) | 232058008 | Normal tension glaucoma (disorder)
+
+Naevus choroïdien maculaire (œil gauche) | 255024002 | Choroidal nevus (disorder)
+Hypertonie intraoculaire | 421725003 | Ocular hypertension (disorder)
+Blépharite antérieure | 41446000 | Blepharitis (disorder)
+Cataracte corticale | 193570009 | Cortical cataract (disorder)
+Drusen maculaires | 312912005 | Retinal drusen (disorder)
+Décollement de l’épithélium pigmentaire rétinien | 342581000119102 | Detachment of retinal pigment epithelium (disorder)
+
+Exotropie intermittente | 246655008 | Intermittent exotropia (disorder)
+
+Sclérose nucléaire du cristallin | 53889007 | Nuclear senile cataract (disorder)
+Œdème papillaire | 423341008 | Papilledema (disorder)
+Atrophie rétinienne secondaire à nécrose | 231970004 | Acute retinal necrosis syndrome (disorder)
+
+Paralysie microvasculaire du nerf VI | 302033007 | Abducens nerve palsy (disorder)
+Cataracte nucléaire (œil droit) | 53889007 | Nuclear senile cataract (disorder)
+Diplopie intermittente | 24982008 | Diplopia (finding)

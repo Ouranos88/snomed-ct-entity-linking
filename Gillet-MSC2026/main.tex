@@ -1,0 +1,387 @@
+% EPL master thesis covers template
+%documentclass{masterthesis}
+\documentclass{EPL-master-thesis-covers-EN}
+\raggedbottom
+
+% = Packages ================================================================================
+\usepackage[export]{adjustbox}  % frame around pictures
+\usepackage{xspace}
+\usepackage{xcolor}
+\usepackage{geometry}
+\usepackage{url}
+\usepackage{hyperref}
+\usepackage{minted}     % code listings
+\setminted{%
+  fontsize=\small,
+  frame=lines,
+  breaklines=true,
+  breakanywhere=true,
+  breakautoindent=true,
+  breaksymbol={\color{gray}\footnotesize$\hookrightarrow$},
+  tabsize=4,
+}
+\usepackage{import}
+\usepackage{standalone}
+\usepackage{graphicx}   % images
+\usepackage{pdfpages}   % import pdfs
+\usepackage{pdflscape}
+\usepackage{lscape}
+\usepackage{todonotes}  % \todo{}
+\usepackage{enumitem}   % customize lists
+\usepackage{subcaption} % subfigures
+\usepackage{colortbl}   % color cells of a table
+\usepackage{threeparttable} % tables with footnotes,...
+\usepackage{multirow}   % cells that span over multiple rows in tables
+\usepackage{pifont}     % icons \ding{}
+\usepackage{glossaries} % glossary
+\usepackage[nospace,nocompress]{cite}   % Fix \nocite errors
+\usepackage{comment}
+\usepackage{epsfig}
+\usepackage{array}
+\usepackage{supertabular}
+\usepackage{gensymb}    % ° symbol
+\usepackage{textcomp}   % \textcent
+\usepackage{amssymb}    % math R symbol
+\usepackage{longtable} % allows tables to span multiple pages
+\usepackage{booktabs}  % optional, nicer horizontal lines
+\usepackage{amsmath}   % math environments and \mathbf
+\usepackage{tikz}
+\usetikzlibrary{shapes.geometric, arrows, positioning, shadows}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+
+\frenchspacing
+\setlength{\emergencystretch}{3em}
+\hbadness=10000
+\vbadness=10000
+\hfuzz=1000pt
+\vfuzz=50pt
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+
+\hypersetup{
+    colorlinks,
+    linkcolor={red!50!black},
+    citecolor={blue!50!black},
+    urlcolor={blue!80!black}
+}
+
+% = Colors ==================================================================================
+\definecolor{Blue}{rgb}{0,0,1}
+\definecolor{Red}{rgb}{1,0,0}
+\definecolor{Magenta}{rgb}{1,0,1}
+\definecolor{dark-gray}{gray}{0.2}
+\definecolor{light-gray}{gray}{0.95}
+\definecolor{formalshadeOrange}{HTML}{FFF8F4}
+\definecolor{DarkOrange}{RGB}{237, 130, 49}
+
+% = Commands ================================================================================
+\newcommand{\jean}[1]{\textcolor{Blue}{#1}}
+\newcommand{\arthur}[1]{\textcolor{Red}{#1}}
+\newcommand{\alex}[1]{\textcolor{Magenta}{#1}}
+\newcommand{\eg}{\textit{e.g.,}\xspace}
+\newcommand{\ie}{\textit{i.e.,}\xspace}
+\newcommand{\etal}{\textit{et al.}\xspace}
+\newcommand{\vs}{\textit{vs.}\xspace}
+
+% Keep headings with some following lines to avoid orphaned section titles at page bottoms
+\usepackage{etoolbox}
+\preto\section{\Needspace{10\baselineskip}}
+\preto\subsection{\Needspace{8\baselineskip}}
+\preto\subsubsection{\Needspace{6\baselineskip}}
+
+% = COVER ===================================================================================
+% Title of the thesis
+\title{Automatic Recognition and Generation of SNOMED codes in Medical Documents}
+
+% Subtitle - remove this line if not applicable
+%\subtitle{Development and Applications}
+
+% Name of the student author(s)
+\author{Guillaume \textsc{Gillet}}
+
+% Official title of the master degree (copy/paste from list below)
+\degreetitle{Master [120] in Computer Science and Engineering}
+
+% Name of the supervisor(s)
+\supervisor{Coralie \textsc{Hemptinne}}
+\supervisor{Jean \textsc{Vanderdonckt}}
+
+% Name of the reader(s)
+\readerone{Maxime \textsc{Griot}}
+\readertwo{Demet \textsc{Yuksel}}			% remove if not applicable
+
+% Academic year (update if necessary)
+\years{2025--2026}
+\usepackage{titlesec}
+\usepackage{needspace}
+%\titleformat{\subsubsection}[runin]{}{}{}{}[]
+
+% = GLOSSARY ================================================================================
+\makeglossaries
+    \newglossaryentry{ann}{name=ANN, description={Artificial Neural Network}}
+    \newglossaryentry{api}{name=API, description={Application Programming Interface}}
+    \newglossaryentry{cnn}{name=CNN, description={Convolutional Neural Network}}
+    \newglossaryentry{crf}{name=CRF, description={Conditional Random Fields}}
+    \newglossaryentry{ehr}{name=EHR, description={Electronic Health Record}}
+    \newglossaryentry{faiss}{name=FAISS, description={Facebook AI Similarity Search}}
+    \newglossaryentry{hmm}{name=HMM, description={Hidden Markov Model}}
+    \newglossaryentry{knn}{name=k-NN, description={k-Nearest Neighbor}}
+    \newglossaryentry{llm}{name=LLM, description={Large Language Model}}
+    \newglossaryentry{loc}{name=LOC, description={Lines Of Code}} % NOTE: not used as abbreviation in body text; retained for completeness
+    \newglossaryentry{miou}{name=mIoU, description={Mean Intersection over Union}}
+    \newglossaryentry{mrr}{name=MRR, description={Mean Reciprocal Rank}}
+    \newglossaryentry{ndcg}{name=NDCG, description={Normalized Discounted Cumulative Gain}}
+    \newglossaryentry{ner}{name=NER, description={Named Entity Recognition}}
+    \newglossaryentry{nlp}{name=NLP, description={Natural Language Processing}}
+    \newglossaryentry{rag}{name=RAG, description={Retrieval-Augmented Generation}}
+    \newglossaryentry{rnn}{name=RNN, description={Recurrent Neural Network}}
+    \newglossaryentry{rf2}{name=RF2, description={Release Format 2 (SNOMED CT distribution format)}}
+    \newglossaryentry{sdk}{name=SDK, description={Software Development Kit}}
+    \newglossaryentry{svm}{name=SVM, description={Support Vector Machine}}
+    \newglossaryentry{ucl}{name=UCLouvain, description={Université Catholique de Louvain}} % NOTE: not used as abbreviation in body text; retained for completeness
+    \newglossaryentry{ui}{name=UI, description={User Interface}}
+    \newglossaryentry{postcoord}{name=Post-coordination, description={The combination of multiple SNOMED CT concepts to represent a complex clinical idea not expressible by a single concept}}
+    \newglossaryentry{biencoder}{name=Bi-encoder, description={A neural architecture in which query and candidate are encoded independently by the same or similar encoders, enabling efficient approximate nearest-neighbour search}}
+    \newglossaryentry{entitylinking}{name=Entity linking, description={The task of associating a text mention (span) with its corresponding entry in a structured knowledge base or ontology}}
+    \newglossaryentry{spandetection}{name=Span detection, description={The subtask of identifying the character offsets of a named entity mention within a text, prior to concept assignment}}
+
+% = DOCUMENT ================================================================================
+\begin{document}
+    % ====================== FRONT COVER =====================
+    \hypersetup{pageanchor=false}
+    \maketitle
+    %\restoregeometry
+    %\newpage\null\thispagestyle{empty}\newpage % ajoute une page vierge
+    \clearpage\thispagestyle{empty}\mbox{}\clearpage
+
+    % ======================= ABSTRACT =======================
+    \newgeometry{top=3.5cm,bottom=3.5cm,left=4cm,right=4cm}
+    \begin{abstract}
+    \thispagestyle{plain}
+    \pagenumbering{arabic}
+
+Manual SNOMED CT coding of clinical documents burdens physicians with a time-consuming, error-prone task that existing tools handle poorly for non-English text. At the Cliniques universitaires Saint-Luc in Brussels, ophthalmologists face this challenge daily: their French-language consultation notes are inadequately supported by the Epic EHR's built-in coding assistance, motivating the need for an automated solution.
+
+This thesis implements and rigorously compares four computational approaches to automatic SNOMED CT entity linking: a three-tier dictionary with fuzzy matching (M1), a SapBERT bi-encoder with FAISS retrieval (M2), an LLM-driven named entity recognition pipeline grounded by SNOMED vector search (M3), and a hybrid architecture combining LLM span detection with tiered dictionary lookup (M4).
+
+On the SNOMED CT Entity Linking Challenge 1.2.1 benchmark (272 MIMIC-IV discharge summaries, 75{,}491 gold annotations), M1 achieves an mIoU of 0.3601, competitive with the challenge winner (0.420), while LLM-based methods score near zero (0.016--0.040). This apparent underperformance is explained by what this thesis identifies as the \emph{annotation density paradox}: the benchmark exhaustively labels every medical term (${\sim}340$ per note), while LLM methods selectively extract clinically meaningful entities (${\sim}35$ per note). When measured independently of extraction density, M4 achieves the highest MRR (0.68) and a Hits@5 of 0.73 across all methods.
+
+The French clinical evaluation reveals a complete reversal of rankings. On six anonymised ophthalmological PDFs from Saint-Luc, LLM-based methods outperform dictionary approaches: M3 and M4 identify 43.8\% of physician-validated diagnoses versus 37.5\% for M1. A targeted prompt improvement explicitly instructing the model to capture systemic comorbidities raises M4 to 56.3\% (M4*), surpassing both GPT-3.5 and Claude Sonnet 4.6 without retrieval grounding, a 12.5-point gain requiring no model retraining. This advantage is confirmed on 36 structured French clinical cases (270 gold annotations), where M4 achieves the highest top-5 hit rate (42\%).
+
+These results demonstrate that benchmark performance alone is an insufficient basis for clinical deployment decisions. For Saint-Luc, M4* offers the best trade-off between coverage, concept precision, and SNOMED validity guarantees, all without transmitting patient data to external servers.
+
+
+    \end{abstract}
+
+
+        % =================== ACKNOWLEDGMENTS ====================
+
+    % =================== TABLE OF CONTENTS ====================
+    \tableofcontents
+    \newpage
+    \hypersetup{pageanchor=true}
+
+    \chapter{Introduction}
+    \subimport{chapters/Table/}{Introduction.tex}
+
+    \chapter{Related Work}
+    \subimport{chapters/Table/}{RelatedWork.tex}
+
+    \chapter{Methodology}
+    \subimport{chapters/Table/}{Methodology.tex}
+
+    \chapter{Implementation}
+    \subimport{chapters/Table/}{Implementation.tex}
+
+    \chapter{Results and Discussion}
+    \subimport{chapters/Table/}{Results.tex}
+
+    \chapter{Conclusion and Future Work}
+    \subimport{chapters/Table/}{Conclusion.tex}
+
+    \listoffigures
+    \listoftables
+
+    % ======================= GLOSSARY =======================
+    \glsadd{ann}\glsadd{api}\glsadd{cnn}\glsadd{crf}\glsadd{ehr}\glsadd{faiss}\glsadd{hmm}\glsadd{knn}\glsadd{llm}\glsadd{loc}\glsadd{miou}\glsadd{mrr}\glsadd{ndcg}\glsadd{ner}\glsadd{nlp}\glsadd{rag}\glsadd{rnn}\glsadd{rf2}\glsadd{sdk}\glsadd{svm}\glsadd{ucl}\glsadd{ui}\glsadd{postcoord}\glsadd{biencoder}\glsadd{entitylinking}\glsadd{spandetection}
+    \printglossary[nonumberlist]
+
+    % ===================== BIBLIOGRAPHY =====================
+    \nocite{*} % Print all references regardless of whether they were cited in the poster or not
+    \bibliographystyle{plain} % Plain referencing style
+    \bibliography{references} % Use the example bibliography file sample.bib
+
+    % ===================== BIBLIOGRAPHY =====================
+    \appendix
+
+    % =================== APPENDIX: PROMPTS ==================
+    \chapter{LLM Prompts Used in Methods 3 and 4}
+    \label{app:prompts}
+
+    This appendix reproduces the exact prompts passed to \texttt{llama3.1:8b} via Ollama
+    in Methods~3, 4, and~4*. Each prompt listing is split into a \textit{system message}
+    (static, sent once per API call) and a \textit{user message} (dynamic, assembled per
+    note or per span batch). Prompts are extracted verbatim from
+    \texttt{Link/method3\_llm\_rag.py} and \texttt{Link/method4\_hybrid.py}.
+
+    \section{Method 3 NER Prompt}
+    \label{sec:m3ner}
+
+    Used in Stage~1 of Method~3 (\texttt{\_llm\_extract\_spans} in
+    \texttt{method3\_llm\_rag.py}). Notes longer than 12\,000 characters are split into
+    overlapping chunks (500-character overlap); each chunk is sent as a separate call with
+    the same system message. Extracted spans are deduplicated by normalised span text before
+    offset recovery.
+
+    \smallskip\noindent\textit{Note:} After the MIMIC-IV benchmark evaluation was completed,
+    the \texttt{SCOPE} paragraph from M4* (Section~\ref{sec:m4starner}) was merged into
+    \texttt{\_NER\_SYSTEM} in the production code. The prompt below reflects the version
+    used for the results reported in Chapter~5.
+
+    \medskip
+    \noindent\textbf{System message:}
+
+    \begin{minted}[frame=lines, framesep=2mm, fontsize=\footnotesize,
+                   breaklines=true, bgcolor=light-gray]{text}
+You are a clinical NLP expert. Extract all medical entities from the following
+clinical note that could be mapped to SNOMED CT concepts.
+
+CRITICAL RULES:
+- Copy the span EXACTLY as it appears in the note -- character for character.
+- NEVER expand abbreviations. If the note says 'IOL', return 'IOL'. If it says
+  'CA profonde', return 'CA profonde'. If it says 'neuropathie optique bilat',
+  return 'neuropathie optique bilat'.
+- NEVER paraphrase, translate, or complete partial words.
+- Short abbreviations (IOL, DMEK, OCT, OD, OG, AV, PIO, HTA, HTO) are valid
+  entities -- include them.
+
+Semantic types: disorder, finding, procedure, body_structure, substance,
+observable_entity
+
+Return ONLY a JSON array. Each element: {"span": "...", "type": "..."}
+No explanation, no markdown fencing -- raw JSON only.
+    \end{minted}
+
+    \medskip
+    \noindent\textbf{User message:}
+
+    \begin{minted}[frame=lines, framesep=2mm, fontsize=\footnotesize,
+                   breaklines=true, bgcolor=light-gray]{text}
+{note_text_or_chunk}
+    \end{minted}
+
+    \section{Method 4 NER Prompt (Original Scope)}
+    \label{sec:m4ner}
+
+    Method~4 calls \texttt{\_llm\_extract\_spans} imported directly from
+    \texttt{method3\_llm\_rag.py} (see \texttt{method4\_hybrid.py}, line~156). The NER
+    system message is therefore \textbf{identical to Section~\ref{sec:m3ner}} for the
+    original-scope variant used in the MIMIC-IV benchmark evaluation. It is listed
+    separately here to mark the experimental boundary between M4 and M4*, and to confirm
+    that the only change introduced in M4* is the addition of the \texttt{SCOPE} paragraph
+    documented in Section~\ref{sec:m4starner}.
+
+    \medskip
+    \noindent\textbf{System message:} identical to Section~\ref{sec:m3ner}.
+
+    \medskip
+    \noindent\textbf{User message:} identical to Section~\ref{sec:m3ner}.
+
+    \section{Method 4* NER Prompt (Expanded Comorbidity Scope)}
+    \label{sec:m4starner}
+
+    M4* modifies the NER system message by inserting a \texttt{SCOPE} paragraph immediately
+    after the opening task description. The \texttt{CRITICAL RULES} block, semantic type
+    list, and output format are unchanged. The inserted paragraph is the sole source of the
+    12.5 percentage point improvement in comorbidity recall observed on the French qualitative
+    evaluation (Section~5.2.3).
+
+    \medskip
+    \noindent\textbf{System message} (addition relative to Section~\ref{sec:m3ner} shown
+    between the dashed lines):
+
+    \begin{minted}[frame=lines, framesep=2mm, fontsize=\footnotesize,
+                   breaklines=true, bgcolor=light-gray]{text}
+You are a clinical NLP expert. Extract all medical entities from the following
+clinical note that could be mapped to SNOMED CT concepts.
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+SCOPE: Include ALL diagnoses and findings -- both primary ophthalmic findings
+AND systemic comorbidities mentioned anywhere in the note (patient history,
+background conditions, co-morbidities such as hypertension, diabetes, etc.).
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+CRITICAL RULES:
+- Copy the span EXACTLY as it appears in the note -- character for character.
+- NEVER expand abbreviations. If the note says 'IOL', return 'IOL'. If it says
+  'CA profonde', return 'CA profonde'. If it says 'neuropathie optique bilat',
+  return 'neuropathie optique bilat'.
+- NEVER paraphrase, translate, or complete partial words.
+- Short abbreviations (IOL, DMEK, OCT, OD, OG, AV, PIO, HTA, HTO) are valid
+  entities -- include them.
+
+Semantic types: disorder, finding, procedure, body_structure, substance,
+observable_entity
+
+Return ONLY a JSON array. Each element: {"span": "...", "type": "..."}
+No explanation, no markdown fencing -- raw JSON only.
+    \end{minted}
+
+    \medskip
+    \noindent\textbf{User message:} identical to Section~\ref{sec:m3ner}.
+
+    \section{Method 4 Reranking Prompt}
+    \label{sec:m4rerank}
+
+    Used when LLM reranking is enabled in Method~4 (\texttt{\_llm\_rerank\_batch} in
+    \texttt{method4\_hybrid.py}). Spans are sent in batches of up to 8 per LLM call,
+    reducing API overhead by approximately $8\times$ relative to one-span-per-call
+    reranking. Up to 20 FAISS candidates are presented per span. The model returns a JSON
+    array whose ordering must match the input batch order; the pipeline handles partial
+    failures (missing or malformed entries) by retaining the pre-reranking FAISS rank for
+    that span.
+
+    Note: as documented in Section~5.5.5, LLM reranking was \textbf{not enabled} during
+    the MIMIC-IV benchmark evaluation reported in this thesis. This prompt is provided for
+    completeness and for use in the planned follow-up evaluation.
+
+    \medskip
+    \noindent\textbf{System message:}
+
+    \begin{minted}[frame=lines, framesep=2mm, fontsize=\footnotesize,
+                   breaklines=true, bgcolor=light-gray]{text}
+You are a clinical terminology expert. For each numbered span below, select the
+best SNOMED CT concept from its candidate list. Use the shared clinical context.
+
+Return ONLY a JSON array (one object per span, same order):
+[{"span_id": 0, "selected_concept_id": "..."},
+ {"span_id": 1, "selected_concept_id": "..."}, ...]
+No explanation, no markdown -- raw JSON array only.
+    \end{minted}
+
+    \medskip
+    \noindent\textbf{User message} (one block per span in the batch, separated by blank
+    lines; up to 8 spans per call):
+
+    \begin{minted}[frame=lines, framesep=2mm, fontsize=\footnotesize,
+                   breaklines=true, bgcolor=light-gray]{text}
+[0] Span: "<verbatim span text>"
+    Context: <up to 200 characters of surrounding note text>
+    Candidates:
+      1. [<concept_id>] <preferred term / description>
+      2. [<concept_id>] <preferred term / description>
+      ...up to 20 candidates
+
+[1] Span: "<verbatim span text>"
+    Context: <up to 200 characters of surrounding note text>
+    Candidates:
+      1. [<concept_id>] <preferred term / description>
+      ...
+    \end{minted}
+
+    % ====================== BACK COVER =======================
+    \newpage\null\thispagestyle{empty}\newpage % ajoute une page vierge
+    \backcoverpage % Back cover page
+
+
+\end{document}

@@ -1,0 +1,501 @@
+cas clinique 84
+red, irritated eyes | 9826008 | Conjunctivitis (disorder)
+eye discomfort | 162290004 | Eye discomfort (finding)
+little discharge in his eyes | 271759008 | Eye discharge (finding)
+high cholesterol | 13644009 | Hypercholesterolemia (disorder)
+moderate obesity | 414916001 | Obesity (disorder)
+conjunctival injection | 418363000 | Conjunctival hyperemia (finding)
+papillary reaction of the superior tarsal conjunctiva | UNKNOWN | UNKNOWN
+Artificial tears | 385669000 | Artificial tears (substance)
+
+cas clinique 1
+Diabétique de type 2 | 44054006 | Diabetes mellitus type 2 (disorder)
+antidiabétiques oraux | 410942007 | Oral hypoglycemic agent (substance)
+Ne prend pas régulièrement ses médicaments | 129847007 | Noncompliance with medication regimen (finding)
+hémoglobine glyquée à 10 % | 165679005 | Hemoglobin A1c above reference range (finding)
+cataracte sous-capsulaire postérieure minime | 315353005 | Posterior subcapsular cataract (disorder)
+microanévrismes | 312904009 | Retinal microaneurysm (finding)
+hémorragies diffuses punctiformes et en taches | 422065006 | Retinal hemorrhage (disorder)
+bouquets néovasculaires prérétiniens et prépapillaires | 59276001 | Retinal neovascularization (disorder)
+exsudats secs | 312912001 | Retinal hard exudates (finding)
+baisse d'acuité visuelle rapide | 13164000 | Reduced visual acuity (finding)
+hémorragie intravitréenne massive | 31341008 | Vitreous hemorrhage (disorder)
+rétine en parapluie | 232009009 | Retinal detachment (disorder)
+
+cas clinique 2
+baisse d'acuité visuelle bilatérale rapidement progressive | 13164000 | Reduced visual acuity (finding)
+presbytie | 399305009 | Presbyopia (disorder)
+asthme | 195967001 | Asthma (disorder)
+salbutamol | 372897005 | Salbutamol (substance)
+dexaméthasone en collyre | 116568000 | Dexamethasone (substance)
+allergie | 419199007 | Allergy to substance (disorder)
+céphalées fréquentes | 25064002 | Headache (finding)
+nodules cotonneux | 422426003 | Cotton wool spots (finding)
+exsudats diffus | 312912001 | Retinal hard exudates (finding)
+hémorragies en taches | 422065006 | Retinal hemorrhage (disorder)
+hémorragies en flammèches péripapillaires | 422065006 | Retinal hemorrhage (disorder)
+rétrécissement artériel diffus | UNKNOWN | UNKNOWN
+œdème papillaire bilatéral | 423341008 | Papilledema (disorder)
+douleur rétrosternale | 29857009 | Chest pain (finding)
+traitement antihypertenseur | 27658006 | Antihypertensive agent (substance)
+anxiolytiques | 372729009 | Anxiolytic drug (substance)
+hypertonie oculaire | 4210003 | Ocular hypertension (disorder)
+veines tortueuses et dilatées | UNKNOWN | UNKNOWN
+œil droit rouge et douloureux | 41652007 | Red eye (finding)
+douleur oculaire | 41652007 | Eye pain (finding)
+
+cas clinique 3
+voile devant l'œil droit | 246636008 | Visual disturbance (finding)
+dyslipidémie | 370992007 | Dyslipidemia (disorder)
+chirurgie bilatérale de la cataracte | 232717009 | Cataract extraction (procedure)
+implant de chambre postérieur | 397578001 | Insertion of intraocular lens (procedure)
+opacités sur la capsule postérieure | 315353005 | Posterior capsular opacification (disorder)
+brouillard devant les deux yeux | 246636008 | Visual disturbance (finding)
+
+cas clinique 4
+Déviation interne de l'œil droit | 16596007 | Esotropia (disorder)
+correction optique | 25227002 | Prescription of corrective lenses (procedure)
+
+cas clinique 5
+Violente douleur à l'œil droit | 41652007 | Eye pain (finding)
+baisse d'acuité visuelle | 13164000 | Reduced visual acuity (finding)
+plaie cornéenne paracentrale inférieure transfixiante | 95725002 | Corneal laceration (disorder)
+signe de Seidel important | UNKNOWN | UNKNOWN
+chambre antérieure peu formée | UNKNOWN | UNKNOWN
+Tyndall hématique +++ | 1117005 | Hyphema (disorder)
+plaie de l'iris | 95730003 | Injury of iris (disorder)
+opacification capsulaire postérieure en fougère du cristallin | UNKNOWN | UNKNOWN
+Mydriase post-traumatique | 193462001 | Traumatic mydriasis (disorder)
+débroussailleuse | UNKNOWN | UNKNOWN
+
+cas clinique 6
+Tabagisme actif à 30 paquets-année | 77176002 | Smoker (finding)
+Ophtalmopathie dysthyroïdienne | 193894004 | Thyroid eye disease (disorder)
+hyperthyroïdie | 34486009 | Hyperthyroidism (disorder)
+œil gauche rouge et douloureux | 41652007 | Red eye (finding)
+Photophobie | 193981001 | Photophobia (finding)
+blépharospasme | 41652007 | Blepharospasm (finding)
+larmoiement | 193982008 | Epiphora (finding)
+cercle périkératique | UNKNOWN | UNKNOWN
+Baisse d'acuité visuelle | 13164000 | Reduced visual acuity (finding)
+Test à la fluorescéine positif au niveau cornéen | UNKNOWN | UNKNOWN
+
+cas clinique 7
+HTA traitée | 38341003 | Hypertensive disorder (systemic arterial) (disorder)
+tabagisme actif à 50 paquets-années | 77176002 | Smoker (finding)
+cataracte bilatérale opérée | 232717009 | Cataract extraction (procedure)
+laser pour cataracte secondaire | 312912005 | Posterior capsulotomy (procedure)
+mydriase aréactive | 53623008 | Fixed dilated pupil (finding)
+rétine à gauche de couleur blanche | UNKNOWN | UNKNOWN
+perception lumineuse positive | UNKNOWN | UNKNOWN
+
+cas clinique 8
+Voile de l'œil gauche | 246636008 | Visual disturbance (finding)
+céphalées frontotemporales chroniques | 25064002 | Headache (finding)
+baisse d'acuité visuelle | 13164000 | Reduced visual acuity (finding)
+
+cas clinique 9
+Baisse d'acuité visuelle rapidement progressive | 13164000 | Reduced visual acuity (finding)
+Douleurs rétro-oculaires | 41652007 | Eye pain (finding)
+flou visuel | 246636008 | Visual disturbance (finding)
+paresthésies de l'hémicorps gauche | 91019004 | Paresthesia (finding)
+
+cas clinique 10
+Œil droit très rouge et douloureux | 41652007 | Red eye (finding)
+Photophobie | 193981001 | Photophobia (finding)
+larmoiement important | 193982008 | Epiphora (finding)
+Tache blanche au centre de l'œil droit | UNKNOWN | UNKNOWN
+Myope de -3 dioptries | 57190000 | Myopia (disorder)
+Port habituel de lentilles souples bimensuelles | 424490008 | Contact lens wearer (finding)
+test cornéen à la fluorescéine positif | UNKNOWN | UNKNOWN
+taie cornéenne centrale persistante | 95726001 | Corneal opacity (disorder)
+
+cas clinique 11
+Céphalées brutales | 25064002 | Headache (finding)
+ptosis | 11934000 | Ptosis (disorder)
+diplopie | 24982008 | Diplopia (finding)
+nauséeuse | 422587007 | Nausea (finding)
+Œil droit en divergence | 16596007 | Exotropia (disorder)
+mydriase aréactive | 53623008 | Fixed dilated pupil (finding)
+TDM cérébrale | 77477000 | Computerized axial tomography (procedure)
+
+cas clinique 12
+Œil droit rouge et douloureux | 41652007 | Red eye (finding)
+baisse d'acuité visuelle | 13164000 | Reduced visual acuity (finding)
+insuffisance thyroïdienne | 40930008 | Hypothyroidism (disorder)
+Lévothyrox® | 387544009 | Levothyroxine (substance)
+Gêne respiratoire | 267036007 | Dyspnea (finding)
+essoufflée | 267036007 | Dyspnea (finding)
+cercle périkératique | UNKNOWN | UNKNOWN
+effet Tyndall ++ | UNKNOWN | UNKNOWN
+précipités rétrocornéens « en graisse de mouton » | UNKNOWN | UNKNOWN
+synéchies iridocristalliniennes | 95717004 | Posterior synechiae of iris (disorder)
+Enzyme de conversion augmentée | UNKNOWN | UNKNOWN
+pneumonie interstitielle diffuse | 233604007 | Interstitial pneumonia (disorder)
+corticothérapie | 116602009 | Corticosteroid (substance)
+baisse d'acuité visuelle progressive bilatérale | 13164000 | Reduced visual acuity (finding)
+syndrome fébrile | 386661006 | Fever (finding)
+baisse d'acuité visuelle bilatérale douloureuse | 13164000 | Reduced visual acuity (finding)
+Visage piriforme | UNKNOWN | UNKNOWN
+sourire asymétrique | 30746006 | Facial asymmetry (finding)
+
+cas clinique 1 cardiologie
+Asthénie intense | 13791008 | Asthenia (finding)
+oppressions thoraciques | 23924001 | Angina pectoris (disorder)
+hérédité coronaire | 160303001 | Family history of ischemic heart disease (situation)
+infarctus | 22298006 | Myocardial infarction (disorder)
+angor | 194828000 | Angina pectoris (disorder)
+tabagisme sevré | 8517006 | Ex-smoker (finding)
+dyslipidémie | 370992007 | Dyslipidemia (disorder)
+pravastatine | 387467008 | Pravastatin (substance)
+bronchite chronique | 63480004 | Chronic bronchitis (disorder)
+douleur thoracique | 29857009 | Chest pain (finding)
+sous-décalage de ST | UNKNOWN | UNKNOWN
+Coronarographie | 41976001 | Coronary angiography (procedure)
+sténose de l'artère circonflexe | 233817007 | Coronary artery stenosis (disorder)
+sténose de la coronaire droite | 233817007 | Coronary artery stenosis (disorder)
+Double ICP | 11101003 | Percutaneous transluminal coronary angioplasty (procedure)
+pose de 2 endoprothèses coronaires | 36969009 | Coronary artery stent insertion (procedure)
+Revascularisation complète | 232717009 | Coronary revascularization (procedure)
+trinitrine | 387404004 | Glyceryl trinitrate (substance)
+aténolol | 372826007 | Atenolol (substance)
+créatininémie 150 µmol/L | 90708001 | Elevated serum creatinine (finding)
+implantation de l'artère mammaire interne | 232720002 | Coronary artery bypass graft (procedure)
+fatigue musculaire | 84229001 | Fatigue (finding)
+
+cas clinique 2 cardiologie
+douleur thoracique brutale | 29857009 | Chest pain (finding)
+irradiant dans le bras et la mandibule | UNKNOWN | UNKNOWN
+dyspnée | 267036007 | Dyspnea (finding)
+élévation de la troponinémie ultrasensible | 166717003 | Troponin I above reference range (finding)
+douleur précordiale | 29857009 | Chest pain (finding)
+râles crépitants des bases | 48409008 | Crackles of lung (finding)
+hospitalisé en USIC | 305351004 | Admission to intensive care unit (procedure)
+
+cas clinique 3 cardiologie
+Douleur thoracique constrictive brutale | 29857009 | Chest pain (finding)
+douleur précordiale | 29857009 | Chest pain (finding)
+irradiant dans les épaules et les mâchoires | UNKNOWN | UNKNOWN
+Très dyspnéique | 267036007 | Dyspnea (finding)
+pâle | 271807003 | Pallor (finding)
+râles crépitants | 48409008 | Crackles of lung (finding)
+tachycardie | 3424008 | Tachycardia (finding)
+irrégularités | 248650006 | Irregular heart beat (finding)
+
+cas clinique 4 cardiologie
+Douleur transfixiante épigastrique à irradiation dorsale | 21522001 | Abdominal pain (finding)
+lipothymie | 271594007 | Near syncope (finding)
+paresthésies du membre inférieur gauche | 91019004 | Paresthesia (finding)
+antécédents familiaux coronariens | 160303001 | Family history of ischemic heart disease (situation)
+appendicectomie | 80146002 | Appendectomy (procedure)
+hypertension artérielle | 38341003 | Hypertensive disorder (systemic arterial) (disorder)
+ARA II | 372733002 | Angiotensin II receptor blocker (substance)
+Cozaar® | 386872004 | Losartan (substance)
+bourdonnement d'oreilles | 60862001 | Tinnitus (finding)
+tabagique | 77176002 | Smoker (finding)
+25 paquets-années | 160603005 | Tobacco smoking consumption (finding)
+éthylique | 7200002 | Alcohol intake above recommended sensible limits (finding)
+1 litre de vin par jour | 160593006 | Heavy alcohol consumption (finding)
+5 ou 6 bières | 160593006 | Heavy alcohol consumption (finding)
+Membre inférieur gauche plus froid | UNKNOWN | UNKNOWN
+Pouls fémoral gauche plus faible | UNKNOWN | UNKNOWN
+troponine 0 | UNKNOWN | UNKNOWN
+cholestérol 3,2 g/L | 13644009 | Hypercholesterolemia (disorder)
+triglycérides 4 g/L | 370992007 | Dyslipidemia (disorder)
+ECG | 29303009 | Electrocardiographic procedure (procedure)
+radio de thorax | 168731009 | Chest X-ray (procedure)
+
+cas clinique 5 cardiologie
+fièvre | 386661006 | Fever (finding)
+cardiomyopathie hypertrophique obstructive à caractère familial | 233873004 | Hypertrophic obstructive cardiomyopathy (disorder)
+stimulateur cardiaque endocavitaire | 705129008 | Cardiac pacemaker in situ (finding)
+Détartrage dentaire | 234725009 | Dental scaling (procedure)
+asthénie | 13791008 | Asthenia (finding)
+anorexie | 79890006 | Loss of appetite (finding)
+amaigrissement | 89362005 | Weight loss (finding)
+frissons | 43724002 | Chill (finding)
+sueurs | 161857006 | Sweating (finding)
+myalgies | 68962001 | Myalgia (finding)
+Souffle systolique d'insuffisance mitrale | 36680007 | Mitral valve regurgitation (disorder)
+cicatrices propres de plaies cutanées | 262528003 | Scar (finding)
+CRP 110 mg/L | 166584001 | C-reactive protein raised (finding)
+Fibrinogène 6,5 g/L | UNKNOWN | UNKNOWN
+Hémoglobine 9,8 g/dL | 271737000 | Anemia (disorder)
+hémocultures stériles | UNKNOWN | UNKNOWN
+Échocardiographie transoesophagienne | 40701008 | Transesophageal echocardiography (procedure)
+pas d'image évocatrice de végétation | UNKNOWN | UNKNOWN
+
+cas clinique 6 cardiologie
+Dyspnée d'effort | 267036007 | Dyspnea on exertion (finding)
+Très grand | UNKNOWN | UNKNOWN
+mort subite | 26636000 | Sudden death (finding)
+douleurs thoraciques violentes | 29857009 | Chest pain (finding)
+Carotides hyperpulsatiles | UNKNOWN | UNKNOWN
+souffle holodiastolique | UNKNOWN | UNKNOWN
+souffle systolique | UNKNOWN | UNKNOWN
+hypertrophie ventriculaire gauche | 55827005 | Left ventricular hypertrophy (disorder)
+dilatation de l'aorte ascendante | 253645007 | Dilatation of aorta (disorder)
+Écho-doppler | 40701008 | Echocardiography (procedure)
+
+cas clinique 7 cardiologie
+Souffle précordial | 88610006 | Heart murmur (finding)
+angine fébrile | 302912005 | Acute tonsillitis (disorder)
+hyperthermie à 39,5 °C | 386661006 | Fever (finding)
+eczéma allergique | 24079001 | Atopic dermatitis (disorder)
+terrain atopique familial | 275969002 | Family history of atopy (situation)
+adénoïdectomie | 44376007 | Adenoidectomy (procedure)
+souffle protosystolique | UNKNOWN | UNKNOWN
+ECG normal | UNKNOWN | UNKNOWN
+Cliché de thorax normal | UNKNOWN | UNKNOWN
+
+cas clinique 8 cardiologie
+remplacement valvulaire mitral | 174929002 | Mitral valve replacement (procedure)
+prothèse à double ailette de Saint-Jude | 304120007 | Prosthetic heart valve in situ (finding)
+maladie mitrale rhumatismale | 69823004 | Rheumatic mitral valve disease (disorder)
+aphasie motrice transitoire | 87486003 | Aphasia (finding)
+dilatation atriale gauche | 253352002 | Left atrial enlargement (disorder)
+INR à 2,3 | UNKNOWN | UNKNOWN
+
+cas clinique 9 cardiologie
+Souffle connu | 88610006 | Heart murmur (finding)
+Ancien tabagique | 8517006 | Ex-smoker (finding)
+hypercholestérolémique | 13644009 | Hypercholesterolemia (disorder)
+souffle holosystolique de régurgitation au foyer mitral | 36680007 | Mitral valve regurgitation (disorder)
+augmentation de l'index cardiothoracique | UNKNOWN | UNKNOWN
+insuffisance mitrale | 36680007 | Mitral valve regurgitation (disorder)
+valve épaissie et redondante avec aspect de ballonisation | UNKNOWN | UNKNOWN
+ventricule gauche dilaté | 253350005 | Dilated left ventricle (disorder)
+oreillette gauche dilatée | 253352002 | Left atrial enlargement (disorder)
+Échocardiographie-doppler transthoracique | 40701008 | Echocardiography (procedure)
+Écho sous dobutamine | 312997006 | Stress echocardiography (procedure)
+dobutamine | 386725007 | Dobutamine (substance)
+
+cas clinique 10 cardiologie
+Dyspnée d'aggravation progressive | 267036007 | Dyspnea (finding)
+dyspnée paroxystique nocturne | 78275009 | Paroxysmal nocturnal dyspnea (finding)
+dyspnée de repos | 267036007 | Dyspnea (finding)
+souffle systolique éjectionnel au foyer aortique | UNKNOWN | UNKNOWN
+abolition du 2e bruit | UNKNOWN | UNKNOWN
+râles sous-crépitants diffus | 48409008 | Crackles of lung (finding)
+hypertension artérielle | 38341003 | Hypertensive disorder (systemic arterial) (disorder)
+inhibiteur calcique | 372729009 | Calcium channel blocker (substance)
+phlébite du post-partum | 195394007 | Deep venous thrombosis (disorder)
+souffle cardiaque | 88610006 | Heart murmur (finding)
+souffle holosystolique apexo-axillaire | 36680007 | Mitral valve regurgitation (disorder)
+Valve aortique calcifiée | 60573004 | Calcific aortic valve disease (disorder)
+ouverture diminuée | UNKNOWN | UNKNOWN
+FE à 28 % | UNKNOWN | UNKNOWN
+Écho de stress sous dobutamine | 312997006 | Stress echocardiography (procedure)
+dobutamine | 386725007 | Dobutamine (substance)
+
+cas clinique 11 cardiologie
+Dyspnée d'aggravation progressive | 267036007 | Dyspnea (finding)
+dyspnée paroxystique nocturne | 78275009 | Paroxysmal nocturnal dyspnea (finding)
+souffle connu | 88610006 | Heart murmur (finding)
+souffle systolique éjectionnel au foyer aortique | UNKNOWN | UNKNOWN
+abolition du 2e bruit | UNKNOWN | UNKNOWN
+râles sous-crépitants diffus | 48409008 | Crackles of lung (finding)
+
+cas clinique 12 cardiologie
+chute | 217082002 | Fall (event)
+souffle cardiaque connu | 88610006 | Heart murmur (finding)
+hypercholestérolémie | 13644009 | Hypercholesterolemia (disorder)
+cholécystectomie | 174041007 | Cholecystectomy (procedure)
+lithiase | 266474003 | Calculus of gallbladder (disorder)
+Hématome fessier | 125667009 | Hematoma (disorder)
+Perte de connaissance brève | 271594007 | Syncope (disorder)
+Myoclonies brèves | 82423001 | Myoclonus (finding)
+souffle systolique râpeux | UNKNOWN | UNKNOWN
+souffle protodiastolique | UNKNOWN | UNKNOWN
+2e bruit aboli | UNKNOWN | UNKNOWN
+aorte ascendante dilatée et calcifiée | 253645007 | Dilatation of aorta (disorder)
+altération de la FE | UNKNOWN | UNKNOWN
+Échocardiographie | 40701008 | Echocardiography (procedure)
+
+cas clinique 13 cardiologie
+malaise | 271594007 | Syncope (disorder)
+infarctus du myocarde | 22298006 | Myocardial infarction (disorder)
+terrain diabétique | 44054006 | Diabetes mellitus type 2 (disorder)
+pontage aortocoronaire | 232717009 | Coronary artery bypass graft (procedure)
+Douleur cervicale constrictive irradiant vers le sternum et la mandibule | 29857009 | Chest pain (finding)
+Essoufflement | 267036007 | Dyspnea (finding)
+carvédilol | 386872008 | Carvedilol (substance)
+ramipril | 386872001 | Ramipril (substance)
+dinitrate d'isosorbide | 387152000 | Isosorbide dinitrate (substance)
+rosuvastatine | 407122005 | Rosuvastatin (substance)
+metformine | 372567009 | Metformin (substance)
+Perte de connaissance abrupte | 271594007 | Syncope (disorder)
+myoclonies brèves | 82423001 | Myoclonus (finding)
+souffle holosystolique | UNKNOWN | UNKNOWN
+souffle protodiastolique | UNKNOWN | UNKNOWN
+souffle sur la carotide gauche | UNKNOWN | UNKNOWN
+
+cas clinique 14 cardiologie
+palpitations | 80313002 | Palpitations (finding)
+douleurs thoraciques à l'effort | 29857009 | Chest pain (finding)
+diabète de type 2 | 44054006 | Diabetes mellitus type 2 (disorder)
+néoplasie cutanée de type basocellulaire | 402815007 | Basal cell carcinoma of skin (disorder)
+exérèse | 387713003 | Surgical excision (procedure)
+maladie asthmatique | 195967001 | Asthma (disorder)
+allergie poussière et acariens | 419199007 | Allergy to substance (disorder)
+hypertension artérielle | 38341003 | Hypertensive disorder (systemic arterial) (disorder)
+angioplastie coronaire | 11101003 | Percutaneous transluminal coronary angioplasty (procedure)
+pose d'endoprothèse | 36969009 | Coronary artery stent insertion (procedure)
+diltiazem | 387494007 | Diltiazem (substance)
+hydrochlorothiazide | 387544000 | Hydrochlorothiazide (substance)
+amiloride | 387389006 | Amiloride (substance)
+trinitrine patch | 387404004 | Glyceryl trinitrate (substance)
+simvastatine | 387584005 | Simvastatin (substance)
+béclométasone | 372687004 | Beclometasone (substance)
+glibenclamide | 372729000 | Glibenclamide (substance)
+metformine | 372567009 | Metformin (substance)
+douleurs thoraciques constrictives rétrosternales irradiant dans la mâchoire | 29857009 | Chest pain (finding)
+dyspnée d'effort | 267036007 | Dyspnea on exertion (finding)
+glycémie 1,69 g/L | 80394007 | Hyperglycemia (finding)
+protéinurie positive | 29738008 | Proteinuria (finding)
+cholestérol total 2,95 g/L | 13644009 | Hypercholesterolemia (disorder)
+triglycérides 2,5 g/L | 370992007 | Dyslipidemia (disorder)
+
+cas clinique 15 cardiologie
+glaucome | 23986001 | Glaucoma (disorder)
+Xalatan® | 386961008 | Latanoprost (substance)
+coxarthrose bilatérale | 239872002 | Osteoarthritis of hip (disorder)
+hypertension artérielle essentielle | 59621000 | Essential hypertension (disorder)
+tabagisme stoppé | 8517006 | Ex-smoker (finding)
+hypercholestérolémie | 13644009 | Hypercholesterolemia (disorder)
+diltiazem | 387494007 | Diltiazem (substance)
+aspirine | 1191 | Aspirin (substance)
+pravastatine | 387467008 | Pravastatin (substance)
+furosémide | 387475007 | Furosemide (substance)
+potassium | 88480006 | Potassium (substance)
+Essoufflement | 267036007 | Dyspnea (finding)
+orthopnée | 78275009 | Orthopnea (finding)
+prise de poids récente de 5 kg | 161833006 | Weight gain (finding)
+troisième bruit cardiaque | 248653008 | Third heart sound (finding)
+souffle systolique irradiant dans l'aisselle gauche | 36680007 | Mitral valve regurgitation (disorder)
+Turgescence jugulaire | 248511005 | Jugular venous distension (finding)
+œdèmes malléolaires | 267038008 | Ankle edema (finding)
+râles crépitants bilatéraux | 48409008 | Crackles of lung (finding)
+réflexe hépatojugulaire présent | UNKNOWN | UNKNOWN
+NT-proBNP à 5 676 pg/mL | UNKNOWN | UNKNOWN
+VGM à 100 | UNKNOWN | UNKNOWN
+GT à 1,5 fois la normale | UNKNOWN | UNKNOWN
+
+cas clinique 16 cardiologie
+accélération du rythme cardiaque | 3424008 | Tachycardia (finding)
+Sportif de haut niveau | UNKNOWN | UNKNOWN
+palpitations | 80313002 | Palpitations (finding)
+suppléments diététiques | 226358005 | Dietary supplement (substance)
+Épreuve d'effort | 252359005 | Exercise stress test (procedure)
+
+cas clinique 17 cardiologie
+malaise | 271594007 | Syncope (disorder)
+perte de connaissance | 271594007 | Syncope (disorder)
+diabète de type 2 | 44054006 | Diabetes mellitus type 2 (disorder)
+HTA | 38341003 | Hypertensive disorder (systemic arterial) (disorder)
+candésartan | 386872003 | Candesartan (substance)
+hydrochlorothiazide | 387544000 | Hydrochlorothiazide (substance)
+metformine | 372567009 | Metformin (substance)
+spironolactone | 387420009 | Spironolactone (substance)
+hématome en lunette | UNKNOWN | UNKNOWN
+clairance de la créatinine estimée à 42 mL/min | 431855005 | Decreased creatinine clearance (finding)
+
+cas clinique 18 cardiologie
+Dyspnée d'aggravation progressive | 267036007 | Dyspnea (finding)
+œdèmes des membres inférieurs | 449707004 | Edema of lower extremity (finding)
+prise de poids récente de 4 kg | 161833006 | Weight gain (finding)
+appendicectomie | 80146002 | Appendectomy (procedure)
+glaucome | 23986001 | Glaucoma (disorder)
+Xalatan® | 386961008 | Latanoprost (substance)
+tabagisme estimé à 30 paquets-années non sevré | 77176002 | Smoker (finding)
+AINS | 372729009 | Non-steroidal anti-inflammatory drug (substance)
+Voltarène® | 387458008 | Diclofenac (substance)
+lombalgies chroniques | 278860009 | Chronic low back pain (disorder)
+Consommation de 2 verres de vin par repas | 160593006 | Heavy alcohol consumption (finding)
+Choc de pointe étalé | UNKNOWN | UNKNOWN
+souffle holosystolique de pointe | 36680007 | Mitral valve regurgitation (disorder)
+râles crépitants bilatéraux | 48409008 | Crackles of lung (finding)
+Turgescence jugulaire | 248511005 | Jugular venous distension (finding)
+reflux hépatojugulaire | UNKNOWN | UNKNOWN
+NT-proBNP à 5 676 pg/mL | UNKNOWN | UNKNOWN
+VGM à 100 | UNKNOWN | UNKNOWN
+GT à 1,5 fois la normale | UNKNOWN | UNKNOWN
+troponinémie nulle | UNKNOWN | UNKNOWN
+dyspnée au stade II de la NYHA | UNKNOWN | UNKNOWN
+
+cas clinique 19 cardiologie
+Dyspnée aiguë | 267036007 | Acute dyspnea (finding)
+cure chirurgicale de hernie inguinale | 429559004 | Repair of inguinal hernia (procedure)
+phlébite postopératoire | 195394007 | Deep venous thrombosis (disorder)
+cancer colique | 363406005 | Malignant tumor of colon (disorder)
+chimiothérapie | 367336001 | Chemotherapy (procedure)
+asthénique | 13791008 | Asthenia (finding)
+alité depuis une semaine | 248234008 | Bedridden (finding)
+Polypnée | 386813002 | Tachypnea (finding)
+tirage | 271825005 | Intercostal retraction (finding)
+balancement thoraco-abdominal | UNKNOWN | UNKNOWN
+SpO2 à 85 % | 165517008 | Oxygen saturation below reference range (finding)
+fièvre à 38,5° | 386661006 | Fever (finding)
+Expectoration de sang noirâtre | 66857006 | Hemoptysis (finding)
+Murmure vésiculaire diminué | UNKNOWN | UNKNOWN
+Frottement pleural | 196075003 | Pleural friction rub (finding)
+matité de la base gauche à la percussion | UNKNOWN | UNKNOWN
+
+cas clinique 20 cardiologie
+dyspnée aiguë | 267036007 | Acute dyspnea (finding)
+HTA | 38341003 | Hypertensive disorder (systemic arterial) (disorder)
+dyslipidémie | 370992007 | Dyslipidemia (disorder)
+arthrose des genoux bilatérale | 239873007 | Osteoarthritis of knee (disorder)
+obésité | 414916001 | Obesity (disorder)
+cataracte gauche opérée | 232717009 | Cataract extraction (procedure)
+hystérectomie totale | 236886002 | Total hysterectomy (procedure)
+fibrome | 95315005 | Uterine leiomyoma (disorder)
+fatigue extrême | 84229001 | Fatigue (finding)
+orthopnée | 78275009 | Orthopnea (finding)
+Imovane® | 386874009 | Zopiclone (substance)
+Lipanthyl® | 387249000 | Fenofibrate (substance)
+Propofan® | UNKNOWN | UNKNOWN
+Burinex® | 387544003 | Bumetanide (substance)
+Kaleorid® | 88480006 | Potassium (substance)
+Très dyspnéique | 267036007 | Dyspnea (finding)
+hypotension artérielle | 45007003 | Hypotension (disorder)
+Saturation à 88 % sous 9 litres d'oxygène | 165517008 | Oxygen saturation below reference range (finding)
+marbrures | 247441003 | Mottling of skin (finding)
+Mollet gauche sensible | 162397003 | Calf tenderness (finding)
+Turgescence jugulaire | 248511005 | Jugular venous distension (finding)
+
+cas clinique 21 cardiologie
+Hypertendu ancien | 38341003 | Hypertensive disorder (systemic arterial) (disorder)
+bourdonnements d'oreille | 60862001 | Tinnitus (finding)
+pression artérielle élevés | 38341003 | Hypertensive disorder (systemic arterial) (disorder)
+Vie professionnelle agitée | UNKNOWN | UNKNOWN
+repas mal équilibrés | UNKNOWN | UNKNOWN
+goût prononcé pour les plats salés | UNKNOWN | UNKNOWN
+Ronflement chronique | 72863001 | Snoring (finding)
+périndopril | 386872002 | Perindopril (substance)
+indapamide | 387475001 | Indapamide (substance)
+vérapamil | 387141005 | Verapamil (substance)
+Ibuprofène | 387207008 | Ibuprofen (substance)
+tendinite rotulienne | 202855006 | Patellar tendinitis (disorder)
+obésité | 414916001 | Obesity (disorder)
+
+cas clinique 22 cardiologie
+douleur thoracique d'apparition brutale et persistante | 29857009 | Chest pain (finding)
+lisinopril | 386872009 | Lisinopril (substance)
+simvastatine | 387584005 | Simvastatin (substance)
+hypercholestérolémie | 13644009 | Hypercholesterolemia (disorder)
+épisode grippal | 6142004 | Influenza (disorder)
+fièvre à 38,7° | 386661006 | Fever (finding)
+douleur rétrosternale à type de brûlure | 29857009 | Chest pain (finding)
+irradiant dans le dos | UNKNOWN | UNKNOWN
+trinitrine sublinguale | 387404004 | Glyceryl trinitrate (substance)
+douleur augmentée par inspiration profonde et toux | UNKNOWN | UNKNOWN
+douleurs musculaires au niveau des cuisses | 68962001 | Myalgia (finding)
+crampes au repos | 449917004 | Muscle cramp (finding)
+toux sèche irritative | 11833005 | Dry cough (finding)
+
+cas clinique 23 cardiologie
+Douleurs de jambe droite | 10601006 | Pain in lower limb (finding)
+maladie post-thrombotique | 128053003 | Post-thrombotic syndrome (disorder)
+séquelles ilio-fémorales droites | UNKNOWN | UNKNOWN
+plaie de jambe droite ne cicatrisant pas | 46742003 | Ulcer of lower limb (disorder)

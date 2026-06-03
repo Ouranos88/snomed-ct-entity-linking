@@ -1,0 +1,50 @@
+# Python
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+dist/
+build/
+
+# Generated outputs (rebuild / re-run scripts to regenerate)
+cas_cliniques_answer_verified.txt
+
+# Generated ML artifacts (rebuild with run_pipeline.py)
+Link/results/dictionary.json
+Link/results/rag_index/
+Link/results/sapbert_index/
+Link/results/pdf_comparison/
+
+# Large SNOMED RF2 data (download separately — see README)
+SnomedCT_InternationalRF2_PRODUCTION_20260301T120000Z/
+xSnomedCT_BelgianAlphaReleasePackage_Alpha_20200930/
+
+# Clinical PDFs (patient data — not redistributed)
+Exemples de lettres et notes v2-pages/
+*.pdf
+
+# LaTeX build artifacts
+Gillet-MSC2026/*.aux
+Gillet-MSC2026/*.log
+Gillet-MSC2026/*.out
+Gillet-MSC2026/*.toc
+Gillet-MSC2026/*.lof
+Gillet-MSC2026/*.lot
+Gillet-MSC2026/*.bbl
+Gillet-MSC2026/*.blg
+Gillet-MSC2026/*.synctex.gz
+Gillet-MSC2026/*.glo
+Gillet-MSC2026/*.ist
+Gillet-MSC2026/*.fdb_latexmk
+Gillet-MSC2026/*.fls
+Gillet-MSC2026/_minted*/
+Gillet-MSC2026/*.data.minted
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/

@@ -1,0 +1,419 @@
+================================================================
+ENTITÉS MÉDICALES PAR CAS CLINIQUE
+================================================================
+
+----------------------------------------------------------------
+OPHTALMOLOGIE (EN) — CASE 84
+----------------------------------------------------------------
+high cholesterol                                      | 13644009    | Hypercholesterolemia (disorder)
+moderate obesity                                      | 414916001   | Obesity (disorder)
+conjunctival injection                                | 193894004   | Conjunctival injection (finding)
+papillary reaction superior tarsal conjunctiva        | 416658003   | Conjunctival papillary hypertrophy (disorder)
+discharge                                             | 75823008    | Discharge (morphologic abnormality)
+
+----------------------------------------------------------------
+OPHTALMOLOGIE (FR) — CAS CLINIQUE 1
+----------------------------------------------------------------
+Diabète de type 2                                     | 44054006    | Type 2 diabetes mellitus (disorder)
+Hémoglobine glyquée à 10%                            | 165681007   | Hemoglobin A1c greater than 10 percent (finding)
+Cataracte sous-capsulaire postérieure               | 315353005   | Posterior subcapsular cataract (disorder)
+Microanévrismes rétiniens                             | 87104008    | Microaneurysm (morphologic abnormality)
+Hémorragies rétiniennes                             | 28998008    | Retinal hemorrhage (disorder)
+Néovascularisation prérétinienne                    | 61267008    | Retinal neovascularization (disorder)
+Exsudats secs rétiniens                             | 247131008   | Retinal lipid deposits (disorder)
+Baisse d'acuité visuelle                              | 397540003   | Visual impairment (finding)
+Hémorragie intravitréenne                             | 31341008    | Vitreous hemorrhage (disorder)
+Rétine en parapluie                                   | 42059000    | Retinal detachment (disorder)
+
+----------------------------------------------------------------
+OPHTALMOLOGIE (FR) — CAS CLINIQUE 2
+----------------------------------------------------------------
+Baisse d'acuité visuelle bilatérale rapidement progressive | 1119536003 | Progressive decrease in visual acuity (finding)
+Presbytie                                           | 41256004    | Presbyopia (disorder)
+Asthme                                                | 195967001   | Asthma (disorder)
+Allergie                                              | 781474001   | Allergic disorder (disorder)
+Céphalées fréquentes                                  | 712831003   | Frequent headache (finding)
+Nodules cotonneux                                   | 39832008    | Cotton wool spots (disorder)
+Hémorragies en flammèches                           | 28998008    | Retinal hemorrhage (disorder)
+Rétrécissement artériel rétinien                      | 390834004   | Narrowing of retinal artery (finding)
+Œdème papillaire bilatéral                            | 423488006   | Bilateral papilledema (disorder)
+Douleur rétrosternale                               | 4568003     | Retrosternal pain (finding)
+Hypertonie oculaire                                 | 4210003     | Ocular hypertension (disorder)
+Veines rétiniennes tortueuses et dilatées           | 247117008   | Retinal veins dilated (finding)
+Œil droit rouge et douloureux                         | 75705005    | Red eye (disorder)
+
+----------------------------------------------------------------
+OPHTALMOLOGIE (FR) — CAS CLINIQUE 3
+----------------------------------------------------------------
+Voile devant l'œil droit                              | 397540003   | Visual impairment (finding)
+Dyslipidémie                                          | 370992007   | Dyslipidemia (disorder)
+Opacités sur la capsule postérieure                   | 193615000   | Posterior capsule opacification (disorder)
+Brouillard devant les deux yeux                       | 246636008   | Visual acuity reduced (finding)
+
+----------------------------------------------------------------
+OPHTALMOLOGIE (FR) — CAS CLINIQUE 4
+----------------------------------------------------------------
+Déviation interne de l'œil droit                      | 399054005   | Convergent strabismus (disorder)
+
+----------------------------------------------------------------
+OPHTALMOLOGIE (FR) — CAS CLINIQUE 5
+----------------------------------------------------------------
+Douleur à l'œil droit                                 | 41652007    | Pain in eye (finding)
+Baisse d'acuité visuelle                              | 397540003   | Visual impairment (finding)
+Plaie cornéenne transfixiante                       | 262537000   | Penetrating wound of cornea (disorder)
+Tyndall hématique                                     | 75614007    | Hyphema (disorder)
+Plaie de l'iris                                     | 262543000   | Wound of iris (disorder)
+Opacification capsulaire postérieure du cristallin    | 47337003    | Posterior capsular opacification (disorder)
+Mydriase post-traumatique                             | 404649002   | Traumatic mydriasis (disorder)
+
+----------------------------------------------------------------
+OPHTALMOLOGIE (FR) — CAS CLINIQUE 6
+----------------------------------------------------------------
+Ophtalmopathie dysthyroïdienne                        | 194581002   | Dysthyroid ophthalmopathy (disorder)
+Hyperthyroïdie                                        | 34486009    | Hyperthyroidism (disorder)
+Œil gauche rouge et douloureux                        | 75705005    | Red eye (disorder)
+Photophobie                                           | 409668002   | Photophobia (finding)
+Blépharospasme                                      | 72847009    | Blepharospasm (disorder)
+Larmoiement                                         | 193982009   | Epiphora (disorder)
+Cercle périkératique                                | 29309008    | Ciliary flush (disorder)
+Baisse d'acuité visuelle                              | 397540003   | Visual impairment (finding)
+Test à la fluorescéine positif au niveau cornéen      | 281006003   | Corneal fluorescein staining present (situation)
+
+----------------------------------------------------------------
+OPHTALMOLOGIE (FR) — CAS CLINIQUE 7
+----------------------------------------------------------------
+Hypertension artérielle                             | 24184005    | Hypertensive disorder (disorder)
+Baisse d'acuité visuelle œil gauche                   | 397540003   | Visual impairment (finding)
+Mydriase aréactive œil gauche                         | 37125009    | Fixed dilated pupil (finding)
+Rétine de couleur blanche                           | 26468004    | Retinal ischemia (disorder)
+
+----------------------------------------------------------------
+OPHTALMOLOGIE (FR) — CAS CLINIQUE 8
+----------------------------------------------------------------
+Voile de l'œil gauche                                 | 397540003   | Visual impairment (finding)
+Céphalées frontotemporales chroniques                 | 25064002    | Headache (finding)
+Baisse d'acuité visuelle œil gauche                   | 246636008   | Visual acuity reduced (finding)
+
+----------------------------------------------------------------
+OPHTALMOLOGIE (FR) — CAS CLINIQUE 9
+----------------------------------------------------------------
+Baisse d'acuité visuelle œil droit                    | 397540003   | Visual impairment (finding)
+Douleurs rétro-oculaires à la mobilisation du globe   | 1373822008  | Retroorbital pain (finding)
+Flou visuel (antécédent résolutif)                    | 246636008   | Visual acuity reduced (finding)
+Paresthésies de l'hémicorps gauche (antécédent)       | 91019004    | Paresthesia (finding)
+
+----------------------------------------------------------------
+OPHTALMOLOGIE (FR) — CAS CLINIQUE 10
+----------------------------------------------------------------
+Œil rouge et douloureux                               | 75705005    | Red eye (disorder)
+Myopie (-3 dioptries)                                 | 57190000    | Myopia (disorder)
+Photophobie                                           | 409668002   | Photophobia (finding)
+Larmoiement                                         | 193982009   | Epiphora (disorder)
+Baisse d'acuité visuelle                              | 397540003   | Visual impairment (finding)
+Test à la fluorescéine positif (cornée)               | 281006003   | Corneal fluorescein staining present (situation)
+Taie cornéenne centrale                               | 413921009   | Corneal opacity (disorder)
+
+----------------------------------------------------------------
+OPHTALMOLOGIE (FR) — CAS CLINIQUE 11
+----------------------------------------------------------------
+Céphalées brutales                                    | 25064002    | Headache (finding)
+Ptosis                                                | 11934000    | Ptosis of eyelid (disorder)
+Diplopie                                              | 24982008    | Diplopia (disorder)
+Nausées                                               | 422587007   | Nausea (finding)
+Œil droit en divergence                               | 246716001   | Ocular divergence (observable entity)
+Mydriase aréactive œil droit                          | 37125009    | Fixed dilated pupil (finding)
+Impossibilité de porter l'œil droit en dedans, en haut et en bas| 12900003    | Third cranial nerve weakness (disorder)
+
+----------------------------------------------------------------
+OPHTALMOLOGIE (FR) — CAS CLINIQUE 12
+----------------------------------------------------------------
+Œil rouge et douloureux                               | 75705005    | Red eye (disorder)
+Baisse d'acuité visuelle                              | 397540003   | Visual impairment (finding)
+Insuffisance thyroïdienne                             | 40930008    | Hypothyroidism (disorder)
+Gêne respiratoire                                     | 248549001   | Respiratory difficulty (finding)
+Cercle périkératique                                | 29309008    | Ciliary flush (disorder)
+Effet Tyndall                                       | 246992005   | Anterior chamber flare (finding)
+Précipités rétrocornéens en graisse de mouton       | 246998009   | Keratic precipitates (finding)
+Synéchies iridocristalliniennes                       | 314491003   | Posterior synechiae (disorder)
+Enzyme de conversion augmentée                        | 55235003    | ACE level raised (finding)
+Pneumonie interstitielle diffuse                      | 64667001    | Interstitial pneumonia (disorder)
+Baisse d'acuité visuelle progressive bilatérale       | 1119536003  | Progressive decrease in visual acuity (finding)
+Syndrome fébrile                                      | 386661006   | Fever (finding)
+Visage piriforme / Sourire asymétrique              | 90039006    | Facial nerve disorder (disorder)
+
+----------------------------------------------------------------
+CARDIOLOGIE — CAS CLINIQUE 1
+----------------------------------------------------------------
+Asthénie                                              | 13791008    | Asthenia (finding)
+Oppressions thoraciques à l'effort                    | 23924001    | Chest tightness (finding)
+Infarctus du myocarde (ATCD familial)                 | 22298006    | Myocardial infarction (disorder)
+Angor (ATCD familial)                                 | 194828000   | Angina (disorder)
+Dyslipidémie                                          | 370992007   | Dyslipidemia (disorder)
+Bronchite chronique                                   | 63480004    | Chronic bronchitis (disorder)
+Hypertension artérielle                             | 24184005    | Hypertensive disorder (disorder)
+Douleur thoracique à l'effort                       | 81953000    | Chest pain (finding)
+Sous-décalage du segment ST                           | 428750005   | ST segment depression (finding)
+Sténose de l'artère circonflexe                       | 876858006   | Stenosis of circumflex branch of left coronary artery (disorder)
+Sténose de la coronaire droite                      | 876856005   | Stenosis of right coronary artery (disorder)
+Sténose du tronc coronaire gauche                   | 1255569006  | Stenosis of ostium of left main coronary artery (disorder)
+Sténose de l'artère marginale                         | 1254660006  | Stenosis of marginal branch of coronary artery (disorder)
+
+----------------------------------------------------------------
+CARDIOLOGIE — CAS CLINIQUE 2
+----------------------------------------------------------------
+Douleur thoracique                                    | 29857009    | Chest pain (finding)
+Douleur précordiale                                   | 71884009    | Precordial pain (finding)
+Élévation troponine ultrasensible                     | 1363512008  | Troponin above reference range (finding)
+Dyspnée                                             | 267036007   | Dyspnea (finding)
+Râles crépitants des bases                            | 284520004   | Basal crepitations (finding)
+
+----------------------------------------------------------------
+CARDIOLOGIE — CAS CLINIQUE 3
+----------------------------------------------------------------
+Douleur thoracique constrictive                       | 29857009    | Chest pain (finding)
+Douleur précordiale                                   | 71884009    | Precordial pain (finding)
+Dyspnée                                             | 267036007   | Dyspnea (finding)
+Pâleur                                                | 274643008   | Body pale (finding)
+Tachycardie                                           | 3424008     | Tachycardia (finding)
+Râles crépitants                                    | 162965007   | Crackles (finding)
+
+----------------------------------------------------------------
+CARDIOLOGIE — CAS CLINIQUE 4
+----------------------------------------------------------------
+Douleur épigastrique transfixiante à irradiation dorsale| 79922009    | Epigastric pain (finding)
+Lipothymie                                            | 271594007   | Syncope (disorder)
+Paresthésies membre inférieur gauche                  | 91019004    | Paresthesia (finding)
+Douleur thoracique persistante                        | 29857009    | Chest pain (finding)
+Hypertension artérielle                             | 24184005    | Hypertensive disorder (disorder)
+Bourdonnement d'oreilles                            | 60862001    | Tinnitus (finding)
+Membre inférieur gauche froid                         | 771542000   | Cold extremity (finding)
+Pouls fémoral gauche plus faible                      | 428968002   | Unequal femoral pulses (finding)
+Hypertriglycéridémie                                | 302870006   | Hypertriglyceridemia (disorder)
+
+----------------------------------------------------------------
+CARDIOLOGIE — CAS CLINIQUE 5
+----------------------------------------------------------------
+Cardiomyopathie hypertrophique obstructive            | 45227007    | Hypertrophic obstructive cardiomyopathy (disorder)
+Fièvre                                                | 386661006   | Fever (finding)
+Asthénie                                              | 13791008    | Asthenia (finding)
+Anorexie                                              | 64379006    | Anorexia (finding)
+Amaigrissement                                        | 267024001   | Weight loss (finding)
+Frissons                                              | 43724002    | Chill (finding)
+Sueurs                                                | 415690000   | Diaphoresis (finding)
+Myalgies                                              | 68962001    | Myalgia (finding)
+Insuffisance mitrale                                | 48724000    | Mitral valve regurgitation (disorder)
+CRP élevée (110 mg/L)                                 | 55235003    | C-reactive protein elevated (finding)
+Fibrinogène élevé (6,5 g/L)                           | 27171005    | Fibrinogen level raised (finding)
+Anémie (hémoglobine 9,8 g/dL)                         | 271737000   | Anemia (disorder)
+
+----------------------------------------------------------------
+CARDIOLOGIE — CAS CLINIQUE 6
+----------------------------------------------------------------
+Dyspnée d'effort                                      | 60845006    | Dyspnea on exertion (finding)
+Mort subite (ATCD familial)                           | 26636000    | Sudden death (finding)
+Douleurs thoraciques (ATCD familial)                  | 29857009    | Chest pain (finding)
+Carotides hyperpulsatiles                             | 71022009    | Abnormal carotid arterial pulse (finding)
+Souffle holodiastolique                               | 422325003   | Holodiastolic murmur (finding)
+Souffle systolique                                    | 88610006    | Heart murmur (finding)
+Hypertrophie ventriculaire gauche                     | 55827005    | Left ventricular hypertrophy (disorder)
+Surcharge diastolique du ventricule gauche            | 395650008   | Left ventricular diastolic dysfunction (disorder)
+Dilatation de l'aorte ascendante (60 mm)              | 253645007   | Ascending aorta dilatation (disorder)
+
+----------------------------------------------------------------
+CARDIOLOGIE — CAS CLINIQUE 7
+----------------------------------------------------------------
+Souffle précordial                                    | 88610006    | Heart murmur (finding)
+Angine fébrile                                        | 363746003   | Acute tonsillitis (disorder)
+Fièvre (39,5°C)                                      | 386661006   | Fever (finding)
+Eczéma allergique                                     | 24079001    | Atopic dermatitis (disorder)
+Souffle protosystolique                               | 88610006    | Heart murmur (finding)
+
+----------------------------------------------------------------
+CARDIOLOGIE — CAS CLINIQUE 8
+----------------------------------------------------------------
+Maladie mitrale rhumatismale                          | 83898004    | Rheumatic disease of mitral valve (disorder)
+Aphasie motrice transitoire                           | 53282007    | Motor aphasia (finding)
+Dilatation atriale gauche                             | 253361002   | Left atrial dilatation (disorder)
+Cardiomégalie                                         | 8186001     | Cardiomegaly (disorder)
+
+----------------------------------------------------------------
+CARDIOLOGIE — CAS CLINIQUE 9
+----------------------------------------------------------------
+Hypercholestérolémie                                  | 13644009    | Hypercholesterolemia (disorder)
+Souffle holosystolique de régurgitation               | 248679004   | Mitral pansystolic murmur (finding)
+Insuffisance mitrale                                | 48724000    | Mitral valve regurgitation (disorder)
+Cordages trop longs / Valve ballonisante              | 253409001   | Mitral chordae tendinae too long (disorder)
+Dilatation du ventricule gauche                       | 195124005   | Ventricular dilatation (disorder)
+Pression artérielle pulmonaire systolique à 40 mmHg   | 70995007    | Pulmonary hypertension (disorder)
+Dilatation de l'oreillette gauche                     | 253361002   | Left atrial dilatation (disorder)
+
+----------------------------------------------------------------
+CARDIOLOGIE — CAS CLINIQUE 10
+----------------------------------------------------------------
+Dyspnée paroxystique nocturne                         | 55442000    | Paroxysmal nocturnal dyspnea (finding)
+Dyspnée de repos                                    | 161941007   | Dyspnea (finding)
+Hypertension artérielle                             | 24184005    | Hypertensive disorder (disorder)
+Phlébite du post-partum (antécédent)                  | 237344007   | Puerperal phlebitis (disorder)
+Souffle systolique éjectionnel aortique               | 248675005   | Aortic ejection murmur (finding)
+Râles sous-crépitants                               | 162966008   | Crackles (finding)
+Valve aortique calcifiée                              | 250978003   | Aortic valve calcification (disorder)
+Dilatation des artères pulmonaires                    | 70995007    | Pulmonary hypertension (disorder)
+
+----------------------------------------------------------------
+CARDIOLOGIE — CAS CLINIQUE 11
+----------------------------------------------------------------
+Dyspnée paroxystique nocturne                         | 55442000    | Paroxysmal nocturnal dyspnea (finding)
+Dyspnée d'effort                                    | 60845006    | Dyspnea (finding)
+Souffle systolique éjectionnel aortique               | 248675005   | Aortic ejection murmur (finding)
+Râles sous-crépitants                               | 162966008   | Crackles (finding)
+
+----------------------------------------------------------------
+CARDIOLOGIE — CAS CLINIQUE 12
+----------------------------------------------------------------
+Hypercholestérolémie                                  | 13644009    | Hypercholesterolemia (disorder)
+Hématome fessier                                      | 35566002    | Hematoma (disorder)
+Perte de connaissance                                 | 419045004   | Loss of consciousness (finding)
+Myoclonies                                            | 17450006    | Myoclonus (finding)
+Souffle systolique râpeux                             | 31574009    | Systolic murmur (finding)
+Souffle protodiastolique                              | 30782001    | Diastolic murmur (finding)
+Aorte ascendante dilatée et calcifiée                 | 253645007   | Ascending aorta dilatation (disorder)
+Ventricule gauche dilaté (FE 27%)                     | 195124005   | Ventricular dilatation (disorder)
+
+----------------------------------------------------------------
+CARDIOLOGIE — CAS CLINIQUE 13
+----------------------------------------------------------------
+Infarctus du myocarde (antécédent)                    | 22298006    | Myocardial infarction (disorder)
+Diabète                                               | 73211009    | Diabetes mellitus (disorder)
+Douleur cervicale constrictive à l'effort             | 81680005    | Neck pain (finding)
+Dyspnée d'effort                                    | 60845006    | Dyspnea (finding)
+Perte de connaissance                                 | 419045004   | Loss of consciousness (finding)
+Myoclonies                                            | 17450006    | Myoclonus (finding)
+Souffle holosystolique                                | 88610006    | Heart murmur (finding)
+Souffle protodiastolique                              | 30782001    | Diastolic murmur (finding)
+Souffle carotidien gauche                             | 419642000   | Carotid bruit (finding)
+
+----------------------------------------------------------------
+CARDIOLOGIE — CAS CLINIQUE 14
+----------------------------------------------------------------
+Palpitations                                          | 80313002    | Palpitations (finding)
+Douleur thoracique constrictive à l'effort            | 29857009    | Chest pain (finding)
+Diabète de type 2                                     | 44054006    | Type 2 diabetes mellitus (disorder)
+Néoplasie cutanée basocellulaire (antécédent)         | 254651007   | Basal cell carcinoma (disorder)
+Asthme                                                | 195967001   | Asthma (disorder)
+Hypertension artérielle                             | 24184005    | Hypertensive disorder (disorder)
+Dyspnée d'effort                                      | 60845006    | Dyspnea on exertion (finding)
+Protéinurie                                         | 50456001    | Proteinuria (finding)
+Hypertriglycéridémie                                | 302870006   | Hypertriglyceridemia (disorder)
+
+----------------------------------------------------------------
+CARDIOLOGIE — CAS CLINIQUE 15
+----------------------------------------------------------------
+Glaucome                                              | 23986001    | Glaucoma (disorder)
+Coxarthrose bilatérale                                | 201839001   | Primary coxarthrosis, bilateral (disorder)
+Hypertension artérielle essentielle                   | 59621000    | Essential hypertension (disorder)
+Hypercholestérolémie                                  | 13644009    | Hypercholesterolemia (disorder)
+Dyspnée d'effort                                    | 60845006    | Dyspnea (finding)
+Orthopnée (dort avec trois oreillers)                 | 62744007    | Orthopnea (finding)
+Prise de poids (5 kg)                                 | 8943002     | Weight gain (finding)
+Troisième bruit cardiaque                             | 277455002   | Third heart sound (finding)
+Souffle systolique                                    | 88610006    | Heart murmur (finding)
+Turgescence jugulaire                               | 271653008   | Jugular venous engorgement (finding)
+Œdèmes malléolaires                                   | 267038008   | Edema (finding)
+Râles crépitants bilatéraux                           | 48409008    | Crackles (finding)
+Réflexe hépatojugulaire                               | 72196001    | Hepatojugular reflux (finding)
+NT-proBNP élevé (5676 pg/mL)                        | 408784008   | BNP raised (finding)
+VGM à 100                                             | 10446001    | Macrocytosis (finding)
+GT élevée                                           | 274782002   | Gamma-glutamyl transferase above reference range (finding)
+
+----------------------------------------------------------------
+CARDIOLOGIE — CAS CLINIQUE 16
+----------------------------------------------------------------
+Palpitations à l'effort                               | 80313002    | Palpitations (finding)
+Tachycardie paroxystique à l'effort                   | 6285003     | Paroxysmal tachycardia (disorder)
+
+----------------------------------------------------------------
+CARDIOLOGIE — CAS CLINIQUE 17
+----------------------------------------------------------------
+Perte de connaissance                                 | 419045004   | Loss of consciousness (finding)
+Diabète de type 2                                     | 44054006    | Type 2 diabetes mellitus (disorder)
+Hypertension artérielle                             | 24184005    | Hypertensive disorder (disorder)
+Hématome en lunette                                   | 302227002   | Periorbital hematoma (disorder)
+Insuffisance rénale chronique (clairance 42 mL/min)   | 709044004   | Chronic kidney disease (disorder)
+
+----------------------------------------------------------------
+CARDIOLOGIE — CAS CLINIQUE 18
+----------------------------------------------------------------
+Dyspnée d'effort                                    | 60845006    | Dyspnea (finding)
+Œdèmes des membres inférieurs                         | 267038008   | Edema (finding)
+Prise de poids (4 kg)                                 | 8943002     | Weight gain (finding)
+Glaucome                                              | 23986001    | Glaucoma (disorder)
+Lombalgie chronique                                   | 279039007   | Low back pain (finding)
+Souffle holosystolique                                | 88610006    | Heart murmur (finding)
+Râles crépitants bilatéraux                           | 48409008    | Crackles (finding)
+Turgescence jugulaire                               | 271653008   | Jugular venous engorgement (finding)
+Reflux hépatojugulaire                                | 72196001    | Hepatojugular reflux (finding)
+NT-proBNP élevé (5676 pg/mL)                        | 408784008   | BNP raised (finding)
+VGM à 100                                             | 10446001    | Macrocytosis (finding)
+GT élevée                                           | 274782002   | Gamma-glutamyl transferase above reference range (finding)
+
+----------------------------------------------------------------
+CARDIOLOGIE — CAS CLINIQUE 19
+----------------------------------------------------------------
+Dyspnée aiguë                                         | 230145002   | Dyspnea (finding)
+Phlébite postopératoire (antécédent)                  | 64156001    | Thrombophlebitis (disorder)
+Cancer colique                                        | 363346000   | Malignant neoplasm of colon (disorder)
+Asthénie                                              | 13791008    | Asthenia (finding)
+Polypnée                                              | 271823003   | Tachypnea (finding)
+Désaturation (SpO2 85%)                               | 238161004   | Oxygen saturation below reference range (finding)
+Fièvre (38,5°C)                                      | 386661006   | Fever (finding)
+Tachycardie (121 bpm)                                 | 3424008     | Tachycardia (finding)
+Hémoptysie                                            | 66857006    | Hemoptysis (finding)
+Frottement pleural                                  | 37636003    | Pleural friction rub (finding)
+Matité à la percussion                              | 162947008   | Chest dull to percussion (finding)
+
+----------------------------------------------------------------
+CARDIOLOGIE — CAS CLINIQUE 20
+----------------------------------------------------------------
+Dyspnée aiguë                                         | 230145002   | Dyspnea (finding)
+Hypertension artérielle                             | 24184005    | Hypertensive disorder (disorder)
+Dyslipidémie                                          | 370992007   | Dyslipidemia (disorder)
+Arthrose des genoux bilatérale                        | 396275006   | Osteoarthritis (disorder)
+Obésité                                               | 414916001   | Obesity (disorder)
+Asthénie                                              | 13791008    | Asthenia (finding)
+Tachycardie (108 bpm)                                 | 3424008     | Tachycardia (finding)
+Hypotension artérielle (80/40 mmHg)                   | 45326000    | Hypotension (disorder)
+Désaturation (SpO2 88%)                               | 238161004   | Oxygen saturation below reference range (finding)
+Marbrures                                           | 406128001   | Mottling of skin (finding)
+Mollet gauche sensible                                | 64156001    | Thrombophlebitis (disorder)
+Turgescence jugulaire                               | 271653008   | Jugular venous engorgement (finding)
+
+----------------------------------------------------------------
+CARDIOLOGIE — CAS CLINIQUE 21
+----------------------------------------------------------------
+Hypertension artérielle                             | 24184005    | Hypertensive disorder (disorder)
+Bourdonnements d'oreille                            | 60862001    | Tinnitus (finding)
+Ronflement chronique                                | 72863001    | Snoring (finding)
+Tendinite rotulienne                                | 156662006   | (Patellar tendinitis) or (Pellegrini-Stieda syndrome) (disorder)
+
+----------------------------------------------------------------
+CARDIOLOGIE — CAS CLINIQUE 22
+----------------------------------------------------------------
+Douleur thoracique rétrosternale                      | 139237007   | Retrosternal pain (finding)
+Hypercholestérolémie                                  | 13644009    | Hypercholesterolemia (disorder)
+Épisode grippal (antécédent récent)                   | 6142004     | Influenza (disorder)
+Fièvre (antécédent)                                   | 386661006   | Fever (finding)
+Douleur irradiant dans le dos                         | 57676002    | Back pain (finding)
+Douleur augmentée à l'inspiration et à la toux        | 29857009    | Chest pain (finding)
+Hypertension artérielle                             | 24184005    | Hypertensive disorder (disorder)
+Myalgies des cuisses                                  | 68962001    | Myalgia (finding)
+Crampes musculaires au repos                          | 55300003    | Muscle cramp (finding)
+Toux sèche irritative                                 | 49727002    | Cough (finding)
+
+----------------------------------------------------------------
+CARDIOLOGIE — CAS CLINIQUE 23
+----------------------------------------------------------------
+Maladie post-thrombotique                             | 64156001    | Thrombophlebitis (disorder)
+Douleurs de jambe droite chroniques                   | 57676002    | Leg pain (finding)
+Plaie de jambe droite chronique                       | 400012003   | Chronic wound (disorder)
+
+================================================================

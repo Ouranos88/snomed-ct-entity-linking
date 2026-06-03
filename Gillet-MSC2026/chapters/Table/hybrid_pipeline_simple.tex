@@ -1,0 +1,63 @@
+\begin{figure}[htbp]
+\centering
+\resizebox{\linewidth}{!}{%
+\begin{tikzpicture}[
+    node distance=0.4cm,
+    font=\footnotesize,
+    io/.style={rectangle, rounded corners, draw=black, thick, fill=gray!15,
+               minimum width=12cm, minimum height=0.9cm, align=center},
+    mhead/.style={rectangle, draw=black, thick, minimum width=2.7cm,
+                  minimum height=0.8cm, align=center},
+    mrow/.style={rectangle, draw=black, minimum width=2.7cm,
+                 minimum height=1.0cm, align=center, text width=2.6cm},
+    arr/.style={->, thick, >=stealth}
+]
+
+%% Input
+\node[io] (input) {\textbf{Input:} raw clinical text (French or English)};
+
+%% Method headers
+\node[mhead, fill=orange!50, below=0.9cm of input, xshift=-4.95cm] (hm1) {\textbf{M1}\\Dict\,+\,Fuzzy};
+\node[mhead, fill=green!50,  right=0.2cm of hm1]                    (hm2) {\textbf{M2}\\SapBERT};
+\node[mhead, fill=purple!50, right=0.2cm of hm2]                    (hm3) {\textbf{M3}\\LLM\,+\,RAG};
+\node[mhead, fill=red!40,    right=0.2cm of hm3]                    (hm4) {\textbf{M4}\\Hybrid};
+
+%% Span detection row
+\node[mrow, fill=orange!15, below=0cm of hm1] (sm1) {Sliding window\\(1–8 tokens)};
+\node[mrow, fill=green!15,  below=0cm of hm2] (sm2) {Dict pre-filter\\+ window};
+\node[mrow, fill=purple!15, below=0cm of hm3] (sm3) {LLM NER\\\texttt{llama3.1:8b}};
+\node[mrow, fill=red!15,    below=0cm of hm4] (sm4) {LLM NER\\\texttt{llama3.1:8b}};
+
+%% Concept linking row
+\node[mrow, fill=orange!15, below=0cm of sm1] (cm1) {Dict / Fuzzy\\(3-tier lookup)};
+\node[mrow, fill=green!15,  below=0cm of sm2] (cm2) {FAISS\\(SapBERT emb.)};
+\node[mrow, fill=purple!15, below=0cm of sm3] (cm3) {FAISS\,+\,LLM\\reranking};
+\node[mrow, fill=red!15,    below=0cm of sm4] (cm4) {Dict lookup\\then FAISS};
+
+%% Output
+\node[io, fill=blue!10, below=0.9cm of cm3, xshift=-1.35cm] (output)
+    {\textbf{Output:} top-5 ranked SNOMED CT candidates per detected span};
+
+%% Arrows: input → method headers
+\draw[arr] (input.south) -- ++(0,-0.5) -| (hm1.north);
+\draw[arr] (input.south) -- ++(0,-0.5) -| (hm2.north);
+\draw[arr] (input.south) -- ++(0,-0.5) -| (hm3.north);
+\draw[arr] (input.south) -- ++(0,-0.5) -| (hm4.north);
+
+%% Arrows: concept linking → output
+\draw[arr] (cm1.south) -- ++(0,-0.5) -| (output.north);
+\draw[arr] (cm2.south) -- ++(0,-0.5) -| (output.north);
+\draw[arr] (cm3.south) -- (output.north);
+\draw[arr] (cm4.south) -- ++(0,-0.5) -| (output.north);
+
+%% Row labels
+\node[left=0.2cm of sm1, font=\scriptsize\itshape, align=right, text width=1.4cm]
+    {Span\\detection};
+\node[left=0.2cm of cm1, font=\scriptsize\itshape, align=right, text width=1.4cm]
+    {Concept\\linking};
+
+\end{tikzpicture}%
+}
+\caption{Overview of the four-method comparative framework implemented in this thesis. All methods share the same input format (raw clinical text) and output format (top-5 SNOMED CT candidates per detected span), but differ in their span detection and concept linking strategies.}
+\label{fig:method_overview}
+\end{figure}
